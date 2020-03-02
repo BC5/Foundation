@@ -1,0 +1,36 @@
+name: Foundation
+version: Alpha 0
+main: uk.lsuth.mc.foundation.FoundationCore
+
+api-version: 1.13
+depend: [Vault]
+
+commands:
+  tp:
+    description: Teleports player to another location
+    usage: /tp <x> <y> <z>, /tp <player>, /tp <warp>
+    aliases:
+      - "teleport"
+      - "warp"
+  ping:
+    description: Plays a sound to another player
+    usage: /ping <player>, /ping <player> <message>
+  mint:
+    description: Creates currency from gold
+    usage: /mint <ingots>
+  bal:
+    description: Shows your account balance
+    usage: /bal
+    aliases:
+      - "balance"
+  prefab:
+    description: Instantly create a prefabricated house
+    usage: /prefab <structure> offset-x offset-y offset-z
+  marker:
+    description: Create or list markers
+    usage: /marker, /marker <name>
+  navigate:
+    description: Point your compass in the direction of a marker
+    usage: /navigate, /navigate <marker>
+    aliases:
+      - "nav"

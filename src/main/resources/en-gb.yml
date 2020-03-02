@@ -1,0 +1,27 @@
+cmds:
+  tp:
+    teleportToPlayer: §6Teleporting to player §f
+    teleportToLocation: §6Teleporting to §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
+  bal:
+    balanceMessage: §6You have §a{x}§6 available
+  mint:
+    mintMessage: §6Minted §a{x}
+    mintFailure: §6You don't have enough gold
+  marker:
+    noMarker: §6You don't have any markers yet.
+    markerTitle: §eMarkers
+    markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
+  navigate:
+    navReset: §6Your compass has been reset to spawn
+    navSet: §6Your compass has been set to marker §d{x}
+
+econ:
+  currencyName: Pound
+  currencyNamePlural: Pounds
+  currencySymbol: £
+  insufficientFunds: §4Insufficient funds
+  lootVictim: §6Lost §c{x} §6to §c{y}
+  lootKiller: §6Looted §a{x} §6from §a{y}
+
+chat:
+  format: "§a{player} §e>>§r {message}"
