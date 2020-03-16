@@ -14,6 +14,13 @@ cmds:
   navigate:
     navReset: §6Your compass has been reset to spawn
     navSet: §6Your compass has been set to marker §d{x}
+  invoice:
+    noPlayer: §cYou can only send an invoice to an online player
+    sent: §6Invoice to §d{x}§6 has been sent
+    received: §6You have been invoiced §a{x}§6 by §d{y}§6. Pay it with §b/invoice pay
+    paid: §6Paid §a{x}§6 invoice to §d{y}
+    none: §6You don't have any invoices
+    insufficientFunds: §4Insufficient funds
 
 econ:
   currencyName: Pound

@@ -34,3 +34,6 @@ commands:
     usage: /navigate, /navigate <marker>
     aliases:
       - "nav"
+  invoice:
+    description: Used to demand money from other players, and pay other players
+    usage: /invoice send <amount>, /invoice pay

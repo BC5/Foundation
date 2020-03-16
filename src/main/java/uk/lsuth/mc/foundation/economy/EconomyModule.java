@@ -66,6 +66,7 @@ public class EconomyModule implements Module, Economy
 
         cmds.add(new Mint(this,lmgr.getCommandStrings("mint")));
         cmds.add(new Balance(this,lmgr.getCommandStrings("bal")));
+        cmds.add(new Invoice(this,lmgr.getCommandStrings("invoice")));
 
         return cmds;
     }
