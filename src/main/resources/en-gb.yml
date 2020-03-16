@@ -8,7 +8,7 @@ cmds:
     mintMessage: §6Minted §a{x}
     mintFailure: §6You don't have enough gold
   marker:
-    noMarker: §6You don't have any markers yet.
+    noMarkers: §6You don't have any markers yet.
     markerTitle: §eMarkers
     markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
   navigate:
