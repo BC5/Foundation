@@ -47,7 +47,7 @@ public class Teleport extends FoundationCommand
                 PlayerDataWrapper data = core.dmgr.fetchData(sender);
                 Document doc = data.getPlayerDocument();
                 Document markers = (Document) doc.get("markers");
-                if(markers.get(args[0]) != null)
+                if(markers != null && markers.get(args[0]) != null)
                 {
                     String[] coordsarr = ((String)markers.get(args[0])).split(",");
                     int x,y,z;
@@ -55,14 +55,25 @@ public class Teleport extends FoundationCommand
                     y = Integer.parseInt(coordsarr[1]);
                     z = Integer.parseInt(coordsarr[2]);
                     Location loc = new Location(sender.getWorld(),x,y,z);
+                    sender.sendMessage(strings.get("teleportToMarker").replace("{x}",args[0]));
                     sender.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    return true;
                 }
                 else
                 {
                     Player target = getServer().getPlayer(args[0]);
-                    sender.sendMessage(strings.get("teleportToPlayer") + target.getDisplayName());
-                    sender.teleport(target, PlayerTeleportEvent.TeleportCause.COMMAND);
-                    break;
+
+                    if(target != null)
+                    {
+                        sender.sendMessage(strings.get("teleportToPlayer") + target.getDisplayName());
+                        sender.teleport(target, PlayerTeleportEvent.TeleportCause.COMMAND);
+                        return true;
+                    }
+                    else
+                    {
+                        sender.sendMessage(strings.get("noSuchTeleport"));
+                        return true;
+                    }
                 }
 
 
