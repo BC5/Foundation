@@ -23,6 +23,9 @@ commands:
     usage: /bal
     aliases:
       - "balance"
+  mail:
+    description: Allows mailing of items to other players
+    usage: /mail send <player>, /mail get
   prefab:
     description: Instantly create a prefabricated house
     usage: /prefab <structure> offset-x offset-y offset-z

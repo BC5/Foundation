@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -45,6 +46,25 @@ public class MongoManager implements DataManager
         db = mongo.getDatabase("foundation");
 
         playerCollection = db.getCollection("players");
+    }
+
+    @Override
+    public PlayerDataWrapper fetchData(String name)
+    {
+        Document playerdoc = playerCollection.find(eq("name",name)).first();
+        if(playerdoc == null)
+        {
+            log.warning("Player " + name + " has no database document");
+            return null;
+        }
+        else
+        {
+            UUID playerUUID = UUID.fromString((String) playerdoc.get("_id"));
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+            PlayerDataWrapper dataWrapper = new PlayerDataWrapper(offlinePlayer,this,playerdoc,playerUUID);
+            cachedPlayers.add(dataWrapper);
+            return dataWrapper;
+        }
     }
 
     @Override
@@ -100,6 +120,7 @@ public class MongoManager implements DataManager
     @Override
     public void stash()
     {
+        log.info("Stashing data");
         for(PlayerDataWrapper p:cachedPlayers)
         {
             savePlayer(p);

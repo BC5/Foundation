@@ -13,7 +13,9 @@ import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.MongoManager;
+import uk.lsuth.mc.foundation.essentialcommands.MailListener;
 import uk.lsuth.mc.foundation.language.LanguageManager;
+import uk.lsuth.mc.foundation.railroute.RailListener;
 import uk.lsuth.mc.foundation.structure.Prefab;
 
 import java.io.File;
@@ -56,6 +58,8 @@ public class FoundationCore extends JavaPlugin
         getServer().getPluginManager().registerEvents(new PlayerListener(dmgr),this);
         getServer().getPluginManager().registerEvents(new EconomyListener(eco,lmgr.getStrings("econ")),this);
         getServer().getPluginManager().registerEvents(new ChatManager(new MessageBuilder(lmgr.getStrings("chat").get("format"))),this);
+        getServer().getPluginManager().registerEvents(new RailListener(this),this);
+        getServer().getPluginManager().registerEvents(new MailListener(this),this);
     }
 
     private void loadLanguage()

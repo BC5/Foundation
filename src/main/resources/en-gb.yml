@@ -2,6 +2,8 @@ cmds:
   tp:
     teleportToPlayer: §6Teleporting to player §f
     teleportToLocation: §6Teleporting to §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
+    teleportToMarker: §6Teleporting to §d{x}
+    noSuchTeleport: §6No marker or player by that name
   bal:
     balanceMessage: §6You have §a{x}§6 available
   mint:
@@ -11,6 +13,14 @@ cmds:
     noMarkers: §6You don't have any markers yet.
     markerTitle: §eMarkers
     markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
+  mail:
+    noPlayer: §6Couldn't find player §f{x}
+    sent: §6Sent §e{w} §b{x}§6 to §f{y} §6at a cost of §a{z}
+    nofify: §eYou have mail!
+    hand: §6You aren't holding anything.
+    recipientFull: §f{x} §6 doesn't have enough space in their mailbox for your delivery
+    sender: "§r§eSender:"
+    guiMailbox: §5Mailbox
   navigate:
     navReset: §6Your compass has been reset to spawn
     navSet: §6Your compass has been set to marker §d{x}
