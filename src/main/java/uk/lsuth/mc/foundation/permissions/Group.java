@@ -1,7 +1,5 @@
 package uk.lsuth.mc.foundation.permissions;
 
-import org.bukkit.permissions.Permission;
-
 import java.util.ArrayList;
 
 public class Group

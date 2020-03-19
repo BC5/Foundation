@@ -1,18 +1,17 @@
 package uk.lsuth.mc.foundation;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bson.Document;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import uk.lsuth.mc.foundation.chat.ChatManager;
 import uk.lsuth.mc.foundation.chat.MessageBuilder;
+import uk.lsuth.mc.foundation.data.DataManager;
+import uk.lsuth.mc.foundation.data.MongoManager;
 import uk.lsuth.mc.foundation.data.PlayerListener;
 import uk.lsuth.mc.foundation.economy.EconomyListener;
 import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
-import uk.lsuth.mc.foundation.data.DataManager;
-import uk.lsuth.mc.foundation.data.MongoManager;
 import uk.lsuth.mc.foundation.essentialcommands.MailListener;
 import uk.lsuth.mc.foundation.language.LanguageManager;
 import uk.lsuth.mc.foundation.railroute.RailListener;

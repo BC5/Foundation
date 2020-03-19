@@ -6,10 +6,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,7 +15,6 @@ import org.bukkit.persistence.PersistentDataType;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

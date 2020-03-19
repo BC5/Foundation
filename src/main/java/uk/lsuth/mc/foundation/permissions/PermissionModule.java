@@ -1,11 +1,5 @@
 package uk.lsuth.mc.foundation.permissions;
 
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;

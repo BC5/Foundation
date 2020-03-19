@@ -7,13 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
-import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
-import javax.print.Doc;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Marker extends FoundationCommand
@@ -81,11 +76,11 @@ public class Marker extends FoundationCommand
 
             for(Map.Entry<String,Object> entry:markers.entrySet())
             {
-                String newtxt = txt.replaceFirst("\\{a\\}",entry.getKey());
+                String newtxt = txt.replaceFirst("\\{a}",entry.getKey());
                 String[] coords = ((String) entry.getValue()).split(",");
-                newtxt = newtxt.replaceFirst("\\{x\\}",coords[0]);
-                newtxt = newtxt.replaceFirst("\\{y\\}",coords[1]);
-                newtxt = newtxt.replaceFirst("\\{z\\}",coords[2]);
+                newtxt = newtxt.replaceFirst("\\{x}",coords[0]);
+                newtxt = newtxt.replaceFirst("\\{y}",coords[1]);
+                newtxt = newtxt.replaceFirst("\\{z}",coords[2]);
                 player.sendMessage(newtxt);
             }
         }

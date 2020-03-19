@@ -3,7 +3,6 @@ package uk.lsuth.mc.foundation.economy;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -69,7 +68,7 @@ public class Mint extends FoundationCommand
             else
             {
                 eco.depositPlayer(player,delta);
-                commandSender.sendMessage(mintSuccess.replaceFirst("\\{x\\}",eco.format(delta)));
+                commandSender.sendMessage(mintSuccess.replaceFirst("\\{x}",eco.format(delta)));
             }
 
 

@@ -2,7 +2,6 @@ package uk.lsuth.mc.foundation.economy;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
-import uk.lsuth.mc.foundation.data.DataManager;
 
 public class PlayerLoot
 {

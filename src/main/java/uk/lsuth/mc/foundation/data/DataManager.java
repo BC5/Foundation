@@ -1,8 +1,6 @@
 package uk.lsuth.mc.foundation.data;
 
-import org.bson.Document;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 public interface DataManager
 {

@@ -7,15 +7,14 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-
-//Filters i.e. eq(x,y)
-import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.mongodb.client.model.Filters.eq;
+
+//Filters i.e. eq(x,y)
 
 public class MongoManager implements DataManager
 {
@@ -145,10 +144,6 @@ public class MongoManager implements DataManager
     @Override
     public boolean playerExists(OfflinePlayer player)
     {
-        if(playerCollection.countDocuments(eq("_id",player.getUniqueId().toString())) == 0)
-        {
-            return false;
-        }
-        return true;
+        return playerCollection.countDocuments(eq("_id", player.getUniqueId().toString())) != 0;
     }
 }

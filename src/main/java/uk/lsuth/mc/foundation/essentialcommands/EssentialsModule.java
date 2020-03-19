@@ -1,6 +1,5 @@
 package uk.lsuth.mc.foundation.essentialcommands;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;

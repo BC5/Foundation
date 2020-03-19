@@ -58,7 +58,7 @@ public class Navigate extends FoundationCommand
                     z = Integer.parseInt(coordsarr[2]);
                     Location loc = new Location(player.getWorld(),x,y,z);
                     player.setCompassTarget(loc);
-                    sender.sendMessage(core.getLmgr().getCommandStrings("navigate").get("navSet").replaceFirst("\\{x\\}",args[0]));
+                    sender.sendMessage(core.getLmgr().getCommandStrings("navigate").get("navSet").replaceFirst("\\{x}",args[0]));
                     return true;
                 }
 

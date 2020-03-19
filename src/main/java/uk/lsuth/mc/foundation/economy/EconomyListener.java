@@ -28,11 +28,11 @@ public class EconomyListener implements Listener
         Player victim =  e.getEntity();
         Player killer = victim.getKiller();
 
-        if(killer != null && killer instanceof Player)
+        if(killer != null)
         {
             double penalty = PlayerLoot.loot(victim,killer,eco);
-            victim.sendMessage(victimMessage.replaceFirst("\\{x\\}",eco.format(penalty)).replaceFirst("\\{y\\}",killer.getDisplayName()));
-            killer.sendMessage(killerMessage.replaceFirst("\\{x\\}",eco.format(penalty)).replaceFirst("\\{y\\}",victim.getDisplayName()));
+            victim.sendMessage(victimMessage.replaceFirst("\\{x}",eco.format(penalty)).replaceFirst("\\{y}",killer.getDisplayName()));
+            killer.sendMessage(killerMessage.replaceFirst("\\{x}",eco.format(penalty)).replaceFirst("\\{y}",victim.getDisplayName()));
         }
     }
 }

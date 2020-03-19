@@ -67,13 +67,12 @@ public class Teleport extends FoundationCommand
                     {
                         sender.sendMessage(strings.get("teleportToPlayer") + target.getDisplayName());
                         sender.teleport(target, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        return true;
                     }
                     else
                     {
                         sender.sendMessage(strings.get("noSuchTeleport"));
-                        return true;
                     }
+                    return true;
                 }
 
 
@@ -190,9 +189,9 @@ public class Teleport extends FoundationCommand
 
     private static String formatCoords(int x, int y, int z, String input)
     {
-        input = input.replaceFirst("\\{x\\}",Integer.toString(x));
-        input = input.replaceFirst("\\{y\\}",Integer.toString(y));
-        input = input.replaceFirst("\\{z\\}",Integer.toString(z));
+        input = input.replaceFirst("\\{x}",Integer.toString(x));
+        input = input.replaceFirst("\\{y}",Integer.toString(y));
+        input = input.replaceFirst("\\{z}",Integer.toString(z));
         return input;
     }
 }

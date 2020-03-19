@@ -26,7 +26,7 @@ public class Balance extends FoundationCommand
         if(sender instanceof Player)
         {
             Player player = ((Player) sender);
-            sender.sendMessage(balanceMessage.replaceFirst("\\{x\\}",eco.format(eco.getBalance(player))));
+            sender.sendMessage(balanceMessage.replaceFirst("\\{x}",eco.format(eco.getBalance(player))));
             return true;
         }
         else

@@ -54,6 +54,7 @@ public class EconomyModule implements Module, Economy
         this.dmgr = dmgr;
     }
 
+    @SuppressWarnings("deprecation")
     private OfflinePlayer getOfflinePlayer(String username)
     {
         return Bukkit.getOfflinePlayer(username);
@@ -158,8 +159,7 @@ public class EconomyModule implements Module, Economy
     public double getBalance(OfflinePlayer offlinePlayer)
     {
         Document pdoc = dmgr.fetchData(offlinePlayer).getPlayerDocument();
-        double d = (double) pdoc.get("balance");
-        return d;
+        return (double) pdoc.get("balance");
     }
 
     @Override @Deprecated
@@ -184,11 +184,7 @@ public class EconomyModule implements Module, Economy
     public boolean has(OfflinePlayer offlinePlayer, double v)
     {
         double bal = getBalance(offlinePlayer);
-        if(v > bal)
-        {
-            return false;
-        }
-        return true;
+        return !(v > bal);
     }
 
     @Override
