@@ -29,14 +29,18 @@ public class MongoManager implements DataManager
     Logger log;
     Document playerTemplate;
 
-    public MongoManager(String address, Document playerTemplate, Logger log)
+    public MongoManager(String address, Logger log)
     {
         //Logger.getLogger("org.mongodb.driver").setLevel(Level.OFF);
         cachedPlayers = new ArrayList<PlayerDataWrapper>();
         this.dbAddress = address;
-        this.playerTemplate = playerTemplate;
         this.log = log;
         connect();
+    }
+
+    public void setTemplate(Document playerTemplate)
+    {
+        this.playerTemplate = playerTemplate;
     }
 
     private void connect()

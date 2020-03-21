@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import uk.lsuth.mc.foundation.FoundationCommand;
+import uk.lsuth.mc.foundation.FoundationCore;
 
 import java.util.Map;
 
@@ -33,6 +34,13 @@ public class Mint extends FoundationCommand
         if(commandSender instanceof Player)
         {
             Player player = (Player) commandSender;
+
+            if(!(player.hasPermission("foundation.economy.mint")))
+            {
+                player.sendMessage(FoundationCore.noPermission);
+                return true;
+            }
+
             Inventory inv = player.getInventory();
 
             int i;

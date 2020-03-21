@@ -34,6 +34,12 @@ public class Teleport extends FoundationCommand
         }
         Player sender = (Player) cmdsender;
 
+        if(!(sender.hasPermission("foundation.teleport")))
+        {
+            sender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         switch (args.length)
         {
             //No arguments

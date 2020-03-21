@@ -40,3 +40,6 @@ commands:
   invoice:
     description: Used to demand money from other players, and pay other players
     usage: /invoice send <amount>, /invoice pay
+  transfer:
+    description: Used to transfer money to other players
+    usage: /transfer <player> <amount>

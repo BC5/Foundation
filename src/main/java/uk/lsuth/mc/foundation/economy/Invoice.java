@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.lsuth.mc.foundation.FoundationCommand;
+import uk.lsuth.mc.foundation.FoundationCore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,13 @@ public class Invoice extends FoundationCommand
             if (args.length == 3)
             {
                 if (!args[0].equals("send")) return false;
+
+                if(!(player.hasPermission("foundation.economy.sendInvoice")))
+                {
+                    sender.sendMessage(FoundationCore.noPermission);
+                    return true;
+                }
+
                 Player dest = Bukkit.getServer().getPlayer(args[1]);
                 if (dest == null)
                 {
@@ -48,7 +56,7 @@ public class Invoice extends FoundationCommand
                     double amnt;
                     try
                     {
-                         amnt = Double.parseDouble(args[2]);
+                        amnt = EconomyModule.moneyParse(args[2]);
                     }
                     catch (NumberFormatException e)
                     {
@@ -64,6 +72,11 @@ public class Invoice extends FoundationCommand
             else if (args.length == 1)
             {
                 if (!args[0].equals("pay")) return false;
+                if(!(player.hasPermission("foundation.economy.payInvoice")))
+                {
+                    sender.sendMessage(FoundationCore.noPermission);
+                    return true;
+                }
                 PlayerInvoice inv = latestInvoices.get(player.getUniqueId());
                 if(inv == null)
                 {

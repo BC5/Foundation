@@ -30,6 +30,12 @@ public class Marker extends FoundationCommand
         }
         Player player = (Player) sender;
 
+        if(!(player.hasPermission("foundation.marker")))
+        {
+            player.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         switch(args.length)
         {
             case 0:
@@ -45,6 +51,8 @@ public class Marker extends FoundationCommand
 
     private void createMarker(Player player,String name)
     {
+
+
         PlayerDataWrapper data = core.dmgr.fetchData(player);
         Document doc = data.getPlayerDocument();
 

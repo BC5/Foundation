@@ -38,20 +38,16 @@ public class EconomyModule implements Module, Economy
         return bd.doubleValue();
     }
 
-    public EconomyModule(LanguageManager lmgr)
+    public EconomyModule(LanguageManager lmgr, DataManager dmgr)
     {
         Map<String,String> languageStrings = lmgr.getStrings("econ");
         this.lmgr = lmgr;
+        this.dmgr = dmgr;
 
         currencyName = languageStrings.get("currencyName");
         currencyNamePlural = languageStrings.get("currencyNamePlural");
         currencySymbol = languageStrings.get("currencySymbol");
         insuffientFunds = languageStrings.get("insufficientFunds");
-    }
-
-    public void setDmgr(DataManager dmgr)
-    {
-        this.dmgr = dmgr;
     }
 
     @SuppressWarnings("deprecation")
@@ -68,6 +64,7 @@ public class EconomyModule implements Module, Economy
         cmds.add(new Mint(this,lmgr.getCommandStrings("mint")));
         cmds.add(new Balance(this,lmgr.getCommandStrings("bal")));
         cmds.add(new Invoice(this,lmgr.getCommandStrings("invoice")));
+        cmds.add(new Transfer(this,lmgr.getCommandStrings("transfer"),dmgr));
 
         return cmds;
     }
@@ -358,5 +355,30 @@ public class EconomyModule implements Module, Economy
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String s)
     {
         return false;
+    }
+
+    public static double moneyParse(String string) throws NumberFormatException
+    {
+        int l = string.length();
+
+        if(l-1 < 0)
+        {
+            return Double.parseDouble(string);
+        }
+
+        if(string.charAt(l-1) == 'k')
+        {
+            double amnt = Double.parseDouble(string.substring(0,l-1));
+            return amnt * 1000;
+        }
+        else if(string.charAt(l-1) == 'M')
+        {
+            double amnt = Double.parseDouble(string.substring(0,l-1));
+            return amnt * 1000000;
+        }
+        else
+        {
+            return Double.parseDouble(string);
+        }
     }
 }

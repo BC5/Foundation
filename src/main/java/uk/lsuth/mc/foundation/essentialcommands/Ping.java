@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import uk.lsuth.mc.foundation.FoundationCommand;
+import uk.lsuth.mc.foundation.FoundationCore;
 
 public class Ping extends FoundationCommand
 {
@@ -22,6 +23,12 @@ public class Ping extends FoundationCommand
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
+        if(!(commandSender.hasPermission("foundation.ping")))
+        {
+            commandSender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         switch(args.length)
         {
             //Player, no message

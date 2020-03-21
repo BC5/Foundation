@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.lsuth.mc.foundation.FoundationCommand;
+import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;
 
 import java.util.ArrayList;
@@ -20,6 +21,13 @@ public class Prefab extends FoundationCommand implements Module
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+
+        if(!(sender.hasPermission("foundation.prefab")))
+        {
+            sender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         if(args.length <= 0 || args.length > 4)
         {
             return false;

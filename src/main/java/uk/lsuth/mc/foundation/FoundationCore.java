@@ -1,8 +1,13 @@
 package uk.lsuth.mc.foundation;
 
+import net.milkbowl.vault.economy.Economy;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import uk.lsuth.mc.foundation.chat.ChatManager;
 import uk.lsuth.mc.foundation.chat.MessageBuilder;
@@ -28,6 +33,8 @@ public class FoundationCore extends JavaPlugin
     private LanguageManager lmgr;
     public DataManager dmgr;
 
+    public static String noPermission;
+
     public Logger log;
 
     private ArrayList<Module> modules;
@@ -40,25 +47,34 @@ public class FoundationCore extends JavaPlugin
         log.info("Loading language en-gb");
         loadLanguage();
 
+        noPermission = lmgr.getStrings("perm").get("noPermission");
+
+        log.info("Connecting Database");
+        dmgr = new MongoManager("mongodb://localhost:27017/",log);
+
         log.info("Loading modules");
         modules = new ArrayList<Module>();
         modules.add(new EssentialsModule(this));
         modules.add(new Prefab());
-        EconomyModule eco = new EconomyModule(lmgr);
+        EconomyModule eco = new EconomyModule(lmgr,dmgr);
         modules.add(eco);
+
+        dmgr.setTemplate(assembleTemplate());
 
         registerCommands();
 
-        log.info("Connecting Database");
-        dmgr = new MongoManager("mongodb://localhost:27017/",assembleTemplate(),log);
-        eco.setDmgr(dmgr);
+        PluginManager pluginManager = getServer().getPluginManager();
 
         log.info("Hooking listeners");
-        getServer().getPluginManager().registerEvents(new PlayerListener(dmgr),this);
-        getServer().getPluginManager().registerEvents(new EconomyListener(eco,lmgr.getStrings("econ")),this);
-        getServer().getPluginManager().registerEvents(new ChatManager(new MessageBuilder(lmgr.getStrings("chat").get("format"))),this);
-        getServer().getPluginManager().registerEvents(new RailListener(this),this);
-        getServer().getPluginManager().registerEvents(new MailListener(this),this);
+        pluginManager.registerEvents(new PlayerListener(dmgr),this);
+        pluginManager.registerEvents(new EconomyListener(eco,lmgr.getStrings("econ")),this);
+        pluginManager.registerEvents(new ChatManager(new MessageBuilder(lmgr.getStrings("chat").get("format"))),this);
+        pluginManager.registerEvents(new RailListener(this),this);
+        pluginManager.registerEvents(new MailListener(this),this);
+
+        log.info("Registering Economy");
+        Plugin vault = pluginManager.getPlugin("Vault");
+        Bukkit.getServicesManager().register(Economy.class,eco,vault, ServicePriority.High);
     }
 
     private void loadLanguage()

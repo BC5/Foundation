@@ -1,5 +1,6 @@
 package uk.lsuth.mc.foundation.data;
 
+import org.bson.Document;
 import org.bukkit.OfflinePlayer;
 
 public interface DataManager
@@ -11,6 +12,8 @@ public interface DataManager
     void savePlayer(OfflinePlayer player);
 
     void stash();
+
+    void setTemplate(Document template);
 
     boolean playerExists(OfflinePlayer player);
 

@@ -30,9 +30,15 @@ public class EconomyListener implements Listener
 
         if(killer != null)
         {
-            double penalty = PlayerLoot.loot(victim,killer,eco);
-            victim.sendMessage(victimMessage.replaceFirst("\\{x}",eco.format(penalty)).replaceFirst("\\{y}",killer.getDisplayName()));
-            killer.sendMessage(killerMessage.replaceFirst("\\{x}",eco.format(penalty)).replaceFirst("\\{y}",victim.getDisplayName()));
+            if(killer.hasPermission("foundation.economy.loot"))
+            {
+                if(victim.hasPermission("foundation.economy.lootable"))
+                {
+                    double penalty = PlayerLoot.loot(victim,killer,eco);
+                    victim.sendMessage(victimMessage.replaceFirst("\\{x}",eco.format(penalty)).replaceFirst("\\{y}",killer.getDisplayName()));
+                    killer.sendMessage(killerMessage.replaceFirst("\\{x}",eco.format(penalty)).replaceFirst("\\{y}",victim.getDisplayName()));
+                }
+            }
         }
     }
 }

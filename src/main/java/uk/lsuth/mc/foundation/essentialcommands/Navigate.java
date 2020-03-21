@@ -39,6 +39,12 @@ public class Navigate extends FoundationCommand
         {
             if(sender instanceof Player)
             {
+                if(!(sender.hasPermission("foundation.marker.navigate")))
+                {
+                    sender.sendMessage(FoundationCore.noPermission);
+                    return true;
+                }
+
                 Player player = (Player) sender;
 
                 PlayerDataWrapper data = core.dmgr.fetchData(player);

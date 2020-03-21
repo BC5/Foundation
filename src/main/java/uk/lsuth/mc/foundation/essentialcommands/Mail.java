@@ -17,7 +17,10 @@ import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Mail extends FoundationCommand
 {
@@ -45,6 +48,12 @@ public class Mail extends FoundationCommand
             {
                 if(args[0].equals("send"))
                 {
+                    if(!(mailSender.hasPermission("foundation.mail.send")))
+                    {
+                        mailSender.sendMessage(FoundationCore.noPermission);
+                        return true;
+                    }
+
                     Document recipientDocument;
 
                     //Try to get online player
@@ -147,6 +156,12 @@ public class Mail extends FoundationCommand
             {
                 if(args[0].equals("get"))
                 {
+                    if(!(mailSender.hasPermission("foundation.mail.get")))
+                    {
+                        mailSender.sendMessage(FoundationCore.noPermission);
+                        return true;
+                    }
+
                     Inventory inv = Bukkit.createInventory(null,9, strings.get("guiMailbox"));
                     PlayerDataWrapper pdw = core.dmgr.fetchData(mailSender);
                     Document playerDocument = pdw.getPlayerDocument();

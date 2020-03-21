@@ -31,6 +31,15 @@ cmds:
     paid: §6Paid §a{x}§6 invoice to §d{y}
     none: §6You don't have any invoices
     insufficientFunds: §4Insufficient funds
+  transfer:
+    noPlayer: §6Couldn't find player §f{x}
+    transactionSuccess: §6Sent §a{x}§6 to §d{y}
+    transactionFailed: §6Failed to complete transaction
+    insufficientFunds: §4Insufficient funds
+    largerThanZero: §6Transfer amount must be greater than zero
+
+perm:
+  noPermission: §4You aren't allowed to do that.
 
 econ:
   currencyName: Pound
