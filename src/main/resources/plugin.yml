@@ -23,6 +23,17 @@ commands:
     usage: /bal
     aliases:
       - "balance"
+  msg:
+    description: Message a friend secretly
+    usage: /msg <player> <message>
+    aliases:
+      - "m"
+      - "message"
+  nickname:
+    description: Change your nickname
+    usage: /nickname <name>, /nickname remove
+    aliases:
+      - "nick"
   mail:
     description: Allows mailing of items to other players
     usage: /mail send <player>, /mail get

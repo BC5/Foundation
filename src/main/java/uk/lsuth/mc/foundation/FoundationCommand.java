@@ -1,6 +1,7 @@
 package uk.lsuth.mc.foundation;
 
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 
 public abstract class FoundationCommand implements CommandExecutor
 {
@@ -10,6 +11,7 @@ public abstract class FoundationCommand implements CommandExecutor
     }
 
     private String cmd;
+    public TabCompleter completer;
 
     public String getCommand()
     {

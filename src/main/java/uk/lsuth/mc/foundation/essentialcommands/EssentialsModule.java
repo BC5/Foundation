@@ -26,6 +26,7 @@ public class EssentialsModule implements Module
         cmds.add(new Marker(plugin));
         cmds.add(new Navigate(plugin));
         cmds.add(new Mail(plugin));
+        cmds.add(new Message(plugin));
         return cmds;
     }
 

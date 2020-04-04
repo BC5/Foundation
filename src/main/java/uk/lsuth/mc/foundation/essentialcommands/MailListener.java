@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -21,10 +22,30 @@ import java.util.Map;
 public class MailListener implements Listener
 {
     FoundationCore core;
+    String notify;
 
     public MailListener(FoundationCore core)
     {
         this.core = core;
+        notify = core.getLmgr().getCommandStrings("mail").get("notify");
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e)
+    {
+        PlayerDataWrapper pdw = core.dmgr.fetchData(e.getPlayer());
+        Document playerDocument = pdw.getPlayerDocument();
+        List<Map<String,String>> mailItems = (List<Map<String,String>>) playerDocument.get("mailbox");
+
+        if(mailItems == null)
+        {
+            return;
+        }
+
+        if(mailItems.size() > 0)
+        {
+            e.getPlayer().sendMessage(notify);
+        }
     }
 
     @EventHandler

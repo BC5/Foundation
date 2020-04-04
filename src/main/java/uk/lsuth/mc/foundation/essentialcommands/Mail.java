@@ -2,10 +2,12 @@ package uk.lsuth.mc.foundation.essentialcommands;
 
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -35,6 +37,7 @@ public class Mail extends FoundationCommand
         this.core = core;
         strings = core.getLmgr().getCommandStrings(this.getCommand());
         deliveryIDKey = new NamespacedKey(core,"delivery-id");
+        this.completer = new MailTabComplete();
     }
 
     @Override
@@ -84,7 +87,17 @@ public class Mail extends FoundationCommand
                     //Get player's hand
                     ItemStack toSend = mailSender.getInventory().getItemInMainHand();
 
+
                     if(toSend == null)
+                    {
+                        sender.sendMessage(strings.get("hand"));
+                        if(offline)
+                        {
+                            core.dmgr.unloadPlayer(recipient);
+                        }
+                        return true;
+                    }
+                    else if(toSend.getType() == Material.AIR)
                     {
                         sender.sendMessage(strings.get("hand"));
                         if(offline)
@@ -138,6 +151,10 @@ public class Mail extends FoundationCommand
                         msg = msg.replace("{z}","0");
 
                         mailSender.sendMessage(msg);
+                        if(recipient instanceof Player)
+                        {
+                            ((Player) recipient).sendMessage(strings.get("notify"));
+                        }
 
                         //Remove from initial inventory
                         mailSender.getInventory().removeItem(toSend);
@@ -166,6 +183,12 @@ public class Mail extends FoundationCommand
                     PlayerDataWrapper pdw = core.dmgr.fetchData(mailSender);
                     Document playerDocument = pdw.getPlayerDocument();
                     List<Map<String,String>> mailItems = (List<Map<String,String>>) playerDocument.get("mailbox");
+
+                    //If it's nonexistent, assume blank
+                    if(mailItems == null)
+                    {
+                        mailSender.openInventory(inv);
+                    }
 
                     YamlConfiguration itemcfg = new YamlConfiguration();
                     for(Map<String,String> map:mailItems)
@@ -203,4 +226,30 @@ public class Mail extends FoundationCommand
         }
         return false;
     }
+
+    static class MailTabComplete implements TabCompleter
+    {
+        List<String> commands;
+
+        public MailTabComplete()
+        {
+            commands = new ArrayList<String>();
+            commands.add("get");
+            commands.add("send");
+        }
+
+        @Override
+        public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+        {
+            if(args.length == 1)
+            {
+                return commands;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
 }

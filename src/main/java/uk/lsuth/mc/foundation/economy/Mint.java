@@ -56,11 +56,11 @@ public class Mint extends FoundationCommand
             int delta = 0;
             for (;i > 0; i--)
             {
-                if(inv.contains(Material.GOLD_INGOT))
+                if(inv.contains(Material.DIAMOND))
                 {
-                    ItemStack x = inv.getItem(inv.first(Material.GOLD_INGOT));
+                    ItemStack x = inv.getItem(inv.first(Material.DIAMOND));
                     x.setAmount(x.getAmount()-1);
-                    delta = delta + 10;
+                    delta = delta + 100;
 
                 }
                 else

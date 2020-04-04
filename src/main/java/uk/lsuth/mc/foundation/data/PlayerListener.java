@@ -1,32 +1,46 @@
 package uk.lsuth.mc.foundation.data;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.WorldSaveEvent;
+import uk.lsuth.mc.foundation.FoundationCore;
 
 /**
  * Triggers loading and unloading of player data
  */
 public class PlayerListener implements Listener
 {
-    DataManager dm;
+    DataManager dmgr;
 
-    public PlayerListener(DataManager dm)
+    public PlayerListener(FoundationCore core)
     {
-        this.dm = dm;
+        this.dmgr = core.dmgr;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onLogin(PlayerJoinEvent e)
     {
-        dm.loadPlayer(e.getPlayer());
+        dmgr.loadPlayer(e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDisconnect(PlayerQuitEvent e)
+    {
+        dmgr.unloadPlayer(e.getPlayer());
     }
 
     @EventHandler
-    public void onDisconnect(PlayerQuitEvent e)
+    public void onWorldSave(WorldSaveEvent e)
     {
-        dm.unloadPlayer(e.getPlayer());
+        if(e.getWorld() == Bukkit.getWorlds().get(0))
+        {
+            dmgr.stash();
+        }
+
     }
 
 }

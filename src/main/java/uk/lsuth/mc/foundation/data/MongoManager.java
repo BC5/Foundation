@@ -89,7 +89,15 @@ public class MongoManager implements DataManager
         }
         else
         {
-            log.info("Player" + player.getName() + "loaded from database");
+            //Handle name change
+            if(!playerdoc.getString("name").equals(player.getName()))
+            {
+                log.warning("Player " + playerdoc.getString("name") + " has changed their name to " + player.getName());
+                playerdoc.put("oldName",playerdoc.getString("name"));
+                playerdoc.replace("name",player.getName());
+            }
+
+            log.info("Player " + player.getName() + " loaded from database");
             PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
@@ -123,7 +131,7 @@ public class MongoManager implements DataManager
     @Override
     public void stash()
     {
-        log.info("Stashing data");
+        log.finer("Stashing data");
         for(PlayerDataWrapper p:cachedPlayers)
         {
             savePlayer(p);

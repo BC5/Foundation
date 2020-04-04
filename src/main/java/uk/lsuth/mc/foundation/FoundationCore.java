@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import uk.lsuth.mc.foundation.chat.ChatManager;
+import uk.lsuth.mc.foundation.chat.ChatModule;
 import uk.lsuth.mc.foundation.chat.MessageBuilder;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.MongoManager;
@@ -58,6 +59,7 @@ public class FoundationCore extends JavaPlugin
         modules.add(new Prefab());
         EconomyModule eco = new EconomyModule(lmgr,dmgr);
         modules.add(eco);
+        modules.add(new ChatModule(this));
 
         dmgr.setTemplate(assembleTemplate());
 
@@ -66,9 +68,9 @@ public class FoundationCore extends JavaPlugin
         PluginManager pluginManager = getServer().getPluginManager();
 
         log.info("Hooking listeners");
-        pluginManager.registerEvents(new PlayerListener(dmgr),this);
+        pluginManager.registerEvents(new PlayerListener(this),this);
         pluginManager.registerEvents(new EconomyListener(eco,lmgr.getStrings("econ")),this);
-        pluginManager.registerEvents(new ChatManager(new MessageBuilder(lmgr.getStrings("chat").get("format"))),this);
+        pluginManager.registerEvents(new ChatManager(new MessageBuilder(lmgr.getStrings("chat")),dmgr),this);
         pluginManager.registerEvents(new RailListener(this),this);
         pluginManager.registerEvents(new MailListener(this),this);
 
@@ -122,6 +124,11 @@ public class FoundationCore extends JavaPlugin
             {
                 log.info("Registering command /" + cmd.getCommand());
                 this.getCommand(cmd.getCommand()).setExecutor(cmd);
+                if(cmd.completer != null)
+                {
+                    System.out.println("not null!");
+                    this.getCommand(cmd.getCommand()).setTabCompleter(cmd.completer);
+                }
             }
         }
     }
