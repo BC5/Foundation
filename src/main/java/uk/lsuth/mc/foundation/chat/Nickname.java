@@ -31,12 +31,21 @@ public class Nickname extends FoundationCommand
         {
             if(sender instanceof Player)
             {
+
+
                 if(args[0].length() > 16)
                 {
                     return false;
                 }
 
                 Player player = (Player) sender;
+
+                if(!(player.hasPermission("foundation.nickname")))
+                {
+                    sender.sendMessage(FoundationCore.noPermission);
+                    return true;
+                }
+
                 PlayerDataWrapper pdw = dmgr.fetchData(player);
                 Document pdoc = pdw.getPlayerDocument();
 
