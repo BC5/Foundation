@@ -3,6 +3,7 @@ package uk.lsuth.mc.foundation.structure;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;
@@ -16,6 +17,14 @@ public class Prefab extends FoundationCommand implements Module
     public Prefab()
     {
         super("prefab");
+    }
+
+
+    @Override
+    public List<Listener> getListeners()
+    {
+        ArrayList<Listener> listenerList = new ArrayList<Listener>();
+        return listenerList;
     }
 
     @Override

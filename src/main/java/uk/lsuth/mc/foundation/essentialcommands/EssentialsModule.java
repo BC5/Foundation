@@ -1,5 +1,6 @@
 package uk.lsuth.mc.foundation.essentialcommands;
 
+import org.bukkit.event.Listener;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;
@@ -15,6 +16,14 @@ public class EssentialsModule implements Module
     public EssentialsModule(FoundationCore plugin)
     {
         this.plugin = plugin;
+    }
+
+    @Override
+    public List<Listener> getListeners()
+    {
+        ArrayList<Listener> listenerList = new ArrayList<Listener>();
+        listenerList.add(new MailListener(plugin));
+        return listenerList;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package uk.lsuth.mc.foundation.chat;
 
+import org.bukkit.event.Listener;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;
@@ -23,6 +24,14 @@ public class ChatModule implements Module
         ArrayList<FoundationCommand> cmds = new ArrayList<FoundationCommand>();
         cmds.add(new Nickname(core));
         return cmds;
+    }
+
+    @Override
+    public List<Listener> getListeners()
+    {
+        ArrayList<Listener> listenerList = new ArrayList<Listener>();
+        listenerList.add(new ChatManager(core));
+        return listenerList;
     }
 
     @Override

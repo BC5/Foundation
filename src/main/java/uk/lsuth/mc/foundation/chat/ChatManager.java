@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
@@ -15,6 +16,12 @@ public class ChatManager implements Listener
 {
     MessageBuilder builder;
     DataManager dmgr;
+
+    public ChatManager(FoundationCore core)
+    {
+        builder = new MessageBuilder(core.getLmgr().getStrings("chat"));
+        dmgr = core.getDmgr();
+    }
 
     public ChatManager(MessageBuilder builder, DataManager dmgr)
     {

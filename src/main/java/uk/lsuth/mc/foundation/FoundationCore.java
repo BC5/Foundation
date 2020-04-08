@@ -5,20 +5,17 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import uk.lsuth.mc.foundation.chat.ChatManager;
 import uk.lsuth.mc.foundation.chat.ChatModule;
-import uk.lsuth.mc.foundation.chat.MessageBuilder;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.MongoManager;
 import uk.lsuth.mc.foundation.data.PlayerListener;
-import uk.lsuth.mc.foundation.economy.EconomyListener;
 import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
-import uk.lsuth.mc.foundation.essentialcommands.MailListener;
 import uk.lsuth.mc.foundation.language.LanguageManager;
 import uk.lsuth.mc.foundation.railroute.RailListener;
 import uk.lsuth.mc.foundation.structure.Prefab;
@@ -57,7 +54,7 @@ public class FoundationCore extends JavaPlugin
         modules = new ArrayList<Module>();
         modules.add(new EssentialsModule(this));
         modules.add(new Prefab());
-        EconomyModule eco = new EconomyModule(lmgr,dmgr);
+        EconomyModule eco = new EconomyModule(this);
         modules.add(eco);
         modules.add(new ChatModule(this));
 
@@ -68,15 +65,21 @@ public class FoundationCore extends JavaPlugin
         PluginManager pluginManager = getServer().getPluginManager();
 
         log.info("Hooking listeners");
+        //Module listeners
+        registerModules(pluginManager);
+
+        //Other listeners
         pluginManager.registerEvents(new PlayerListener(this),this);
-        pluginManager.registerEvents(new EconomyListener(eco,lmgr.getStrings("econ")),this);
-        pluginManager.registerEvents(new ChatManager(new MessageBuilder(lmgr.getStrings("chat")),dmgr),this);
         pluginManager.registerEvents(new RailListener(this),this);
-        pluginManager.registerEvents(new MailListener(this),this);
 
         log.info("Registering Economy");
         Plugin vault = pluginManager.getPlugin("Vault");
         Bukkit.getServicesManager().register(Economy.class,eco,vault, ServicePriority.High);
+    }
+
+    public DataManager getDmgr()
+    {
+        return dmgr;
     }
 
     private void loadLanguage()
@@ -129,6 +132,17 @@ public class FoundationCore extends JavaPlugin
                     System.out.println("not null!");
                     this.getCommand(cmd.getCommand()).setTabCompleter(cmd.completer);
                 }
+            }
+        }
+    }
+
+    private void registerModules(PluginManager pluginManager)
+    {
+        for(Module md:modules)
+        {
+            for(Listener listener:md.getListeners())
+            {
+                pluginManager.registerEvents(listener,this);
             }
         }
     }

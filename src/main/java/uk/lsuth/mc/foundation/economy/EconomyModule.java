@@ -5,7 +5,9 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.event.Listener;
 import uk.lsuth.mc.foundation.FoundationCommand;
+import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.language.LanguageManager;
@@ -24,11 +26,10 @@ public class EconomyModule implements Module, Economy
 
     private final String currencyName;
     private final String currencyNamePlural;
-    private final String insuffientFunds;
+    private final String insufficientFunds;
     private final String currencySymbol;
 
     private LanguageManager lmgr;
-
     private DataManager dmgr;
 
     private static double round(double v)
@@ -38,16 +39,16 @@ public class EconomyModule implements Module, Economy
         return bd.doubleValue();
     }
 
-    public EconomyModule(LanguageManager lmgr, DataManager dmgr)
+    public EconomyModule(FoundationCore core)
     {
         Map<String,String> languageStrings = lmgr.getStrings("econ");
-        this.lmgr = lmgr;
-        this.dmgr = dmgr;
+        this.lmgr = core.getLmgr();
+        this.dmgr = core.getDmgr();
 
         currencyName = languageStrings.get("currencyName");
         currencyNamePlural = languageStrings.get("currencyNamePlural");
         currencySymbol = languageStrings.get("currencySymbol");
-        insuffientFunds = languageStrings.get("insufficientFunds");
+        insufficientFunds = languageStrings.get("insufficientFunds");
     }
 
     @SuppressWarnings("deprecation")
@@ -67,6 +68,14 @@ public class EconomyModule implements Module, Economy
         cmds.add(new Transfer(this,lmgr.getCommandStrings("transfer"),dmgr));
 
         return cmds;
+    }
+
+    @Override
+    public List<Listener> getListeners()
+    {
+        ArrayList<Listener> listenerList = new ArrayList<Listener>();
+        listenerList.add(new EconomyListener(this,lmgr.getStrings("econ")));
+        return listenerList;
     }
 
     @Override
@@ -215,7 +224,7 @@ public class EconomyModule implements Module, Economy
         }
         else
         {
-            return new EconomyResponse(0,bal, EconomyResponse.ResponseType.FAILURE,insuffientFunds);
+            return new EconomyResponse(0,bal, EconomyResponse.ResponseType.FAILURE, insufficientFunds);
         }
     }
 

@@ -48,7 +48,7 @@ public class MessageBuilder
     public String buildQuitMessage(Player player)
     {
         String prefix = getPrefix(player);
-        return buildJoinMessage(player.getDisplayName(),prefix);
+        return buildQuitMessage(player.getDisplayName(),prefix);
     }
 
     private String getPrefix(Player player)

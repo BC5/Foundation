@@ -60,3 +60,7 @@ chat:
   format: "{prefix}{player} §e>>§r {message}"
   join: "{prefix}{player} §6joined"
   leave: "{prefix}{player} §6left"
+
+pvp:
+  behead: "{x} was decapitated by {y}"
+  headLore: "§4Killed by §c{x}"
