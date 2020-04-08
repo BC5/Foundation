@@ -63,4 +63,5 @@ chat:
 
 pvp:
   behead: "{x} was decapitated by {y}"
+  murder: "{x} was murdered by {y}"
   headLore: "§4Killed by §c{x}"

@@ -1,15 +1,5 @@
-#Serverwide warps
-warps:
-  zero:
-    x: 0
-    y: 80
-    z: 0
-
-#Mail System
-mail:
-  stampCost: 5
-
-#Economy
-eco:
-  mint:
-    gold_ingot: 10
+lang: "en-gb"
+pvp:
+  beheading: true
+  keepItemsOnMurder: true
+  experiencePenalty: 0.25

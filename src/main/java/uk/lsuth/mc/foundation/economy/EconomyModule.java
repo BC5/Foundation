@@ -41,8 +41,8 @@ public class EconomyModule implements Module, Economy
 
     public EconomyModule(FoundationCore core)
     {
-        Map<String,String> languageStrings = lmgr.getStrings("econ");
         this.lmgr = core.getLmgr();
+        Map<String,String> languageStrings = lmgr.getStrings("econ");
         this.dmgr = core.getDmgr();
 
         currencyName = languageStrings.get("currencyName");

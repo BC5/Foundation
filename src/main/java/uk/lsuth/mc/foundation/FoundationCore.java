@@ -17,6 +17,7 @@ import uk.lsuth.mc.foundation.data.PlayerListener;
 import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
 import uk.lsuth.mc.foundation.language.LanguageManager;
+import uk.lsuth.mc.foundation.pvp.PVPModule;
 import uk.lsuth.mc.foundation.railroute.RailListener;
 import uk.lsuth.mc.foundation.structure.Prefab;
 
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
 
 public class FoundationCore extends JavaPlugin
 {
-    private FileConfiguration cfg = getConfig();
+    private FileConfiguration cfg;
     private LanguageManager lmgr;
     public DataManager dmgr;
 
@@ -42,8 +43,11 @@ public class FoundationCore extends JavaPlugin
     {
         log = this.getLogger();
 
-        log.info("Loading language en-gb");
-        loadLanguage();
+        log.info("Loading configuration");
+        cfg = this.getConfig();
+
+        log.info("Loading language " + cfg.getString("lang"));
+        loadLanguage(cfg.getString("lang"));
 
         noPermission = lmgr.getStrings("perm").get("noPermission");
 
@@ -57,6 +61,7 @@ public class FoundationCore extends JavaPlugin
         EconomyModule eco = new EconomyModule(this);
         modules.add(eco);
         modules.add(new ChatModule(this));
+        modules.add(new PVPModule(this));
 
         dmgr.setTemplate(assembleTemplate());
 
@@ -77,20 +82,26 @@ public class FoundationCore extends JavaPlugin
         Bukkit.getServicesManager().register(Economy.class,eco,vault, ServicePriority.High);
     }
 
+    public FileConfiguration getConfiguration()
+    {
+        return cfg;
+    }
+
     public DataManager getDmgr()
     {
         return dmgr;
     }
 
-    private void loadLanguage()
+    private void loadLanguage(String lang)
     {
-        File langcfgfile = new File(getDataFolder(),"en-gb.yml");
+        File langcfgfile = new File(getDataFolder(),lang + ".yml");
         if(!langcfgfile.exists())
         {
             saveResource(langcfgfile.getName(), false);
         }
         FileConfiguration langcfg = YamlConfiguration.loadConfiguration(langcfgfile);
         lmgr = new LanguageManager(langcfg,this);
+        log.info("Loaded " + langcfgfile.getName());
     }
 
     private Document assembleTemplate()
