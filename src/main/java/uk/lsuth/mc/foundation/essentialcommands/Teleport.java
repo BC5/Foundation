@@ -44,7 +44,7 @@ public class Teleport extends FoundationCommand
 
         if(!(sender.hasPermission("foundation.teleport")))
         {
-            if(sender.hasPermission("foundation.beaconwarp"))
+            if(sender.hasPermission("foundation.beacon.warp"))
             {
                 Location loc = sender.getLocation();
                 loc = loc.subtract(0,1,0);

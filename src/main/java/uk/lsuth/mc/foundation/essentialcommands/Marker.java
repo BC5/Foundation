@@ -123,7 +123,7 @@ public class Marker extends FoundationCommand
 
                 TextComponent textComponent = new TextComponent(TextComponent.fromLegacyText(newtxt));
 
-                if(player.hasPermission("foundation.teleport") || (player.hasPermission("foundation.beaconwarp") && BeaconUtils.isStandingOnBeacon(player)))
+                if(player.hasPermission("foundation.teleport") || (player.hasPermission("foundation.beacon.warp") && BeaconUtils.isStandingOnBeacon(player)))
                 {
                     System.out.println("test");
 

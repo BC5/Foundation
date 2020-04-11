@@ -74,7 +74,12 @@ public class LevitationBeacon implements Listener
 
     private void applyLevitation(Player p, int level)
     {
-        PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION,10,1,true,false);
+        if(!p.hasPermission("foundation.beacon.levitate"))
+        {
+            return;
+        }
+
+        PotionEffect effect = new PotionEffect(PotionEffectType.LEVITATION,10,level,true,false);
         p.addPotionEffect(effect);
     }
 }
