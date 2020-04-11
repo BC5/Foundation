@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import uk.lsuth.mc.foundation.beacon.BeaconUtils;
 import uk.lsuth.mc.foundation.chat.ChatModule;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.MongoManager;
@@ -69,6 +70,7 @@ public class FoundationCore extends JavaPlugin
         modules.add(new Prefab());
         modules.add(new ChatModule(this));
         modules.add(new PVPModule(this));
+        modules.add(new BeaconUtils());
 
         dmgr.setTemplate(assembleTemplate());
 

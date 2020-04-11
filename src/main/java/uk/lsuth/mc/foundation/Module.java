@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface Module
 {
+
     List<FoundationCommand> getCommands();
 
     List<Listener> getListeners();
 
     HashMap<String,Object> getTemplateData();
+
 }
