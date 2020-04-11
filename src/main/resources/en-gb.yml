@@ -14,6 +14,8 @@ cmds:
     mintMessage: §6Minted §a{x}
     mintFailure: §6You don't have enough diamonds
   marker:
+    updated: §6Marker set!
+    removed: §6Marker removed
     noMarkers: §6You don't have any markers yet.
     markerTitle: §eMarkers
     markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
@@ -52,7 +54,7 @@ cmds:
     afk-off: "You are no longer marked as afk"
   spectate:
     spectator: "§6You've been switched to §bSpectator Mode"
-    inDanger: "§cYou can't switch to Spectator Mode when you're in combat"
+    hurt: "§cYou can't switch to Spectator Mode when you're hurt"
     survival: "§6You've been switched to §aSurvival Mode"
     spectatorRemoved: "§cYou've been automatically switched to §aSurvival Mode"
 

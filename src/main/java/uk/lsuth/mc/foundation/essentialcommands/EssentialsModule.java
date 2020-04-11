@@ -14,17 +14,18 @@ public class EssentialsModule implements Module
 {
     FoundationCore plugin;
     Economy eco;
+    ArrayList<Listener> listenerList;
 
     public EssentialsModule(FoundationCore plugin, Economy eco)
     {
         this.plugin = plugin;
         this.eco = eco;
+        listenerList = new ArrayList<Listener>();
     }
 
     @Override
     public List<Listener> getListeners()
     {
-        ArrayList<Listener> listenerList = new ArrayList<Listener>();
         listenerList.add(new MailListener(plugin));
         return listenerList;
     }
@@ -39,6 +40,8 @@ public class EssentialsModule implements Module
         cmds.add(new Navigate(plugin));
         cmds.add(new Mail(plugin,eco));
         cmds.add(new Message(plugin));
+        Spectate s = new Spectate(plugin);
+        cmds.add(s); listenerList.add(s);
         cmds.add(new AFK(plugin.getLmgr().getCommandStrings("afk")));
         return cmds;
     }

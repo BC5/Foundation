@@ -47,6 +47,13 @@ public class Spectate extends FoundationCommand implements Listener
             player.setGameMode(GameMode.SURVIVAL);
             player.sendMessage(strings.get("survival"));
             locations.remove(player.getUniqueId());
+
+            if(tasks.containsKey(player.getUniqueId()))
+            {
+                SpectatorTask task = tasks.get(player.getUniqueId());
+                task.cancel();
+                tasks.remove(player.getUniqueId());
+            }
         }
         else
         {
@@ -60,6 +67,13 @@ public class Spectate extends FoundationCommand implements Listener
         if(sender instanceof Player)
         {
             Player player = (Player) sender;
+
+            if(!player.hasPermission("foundation.spectator"))
+            {
+                player.sendMessage(FoundationCore.noPermission);
+                return true;
+            }
+
             if(player.getGameMode() == GameMode.SPECTATOR)
             {
                 if(locations.containsKey(player.getUniqueId()))
@@ -79,7 +93,7 @@ public class Spectate extends FoundationCommand implements Listener
             }
             else
             {
-                if(player.getNoDamageTicks() > 100)
+                if(player.getHealth() > 19)
                 {
                     locations.put(player.getUniqueId(),player.getLocation());
                     player.setGameMode(GameMode.SPECTATOR);
@@ -92,7 +106,7 @@ public class Spectate extends FoundationCommand implements Listener
                 }
                 else
                 {
-                    player.sendMessage(strings.get("inDanger"));
+                    player.sendMessage(strings.get("hurt"));
                 }
 
 
@@ -127,6 +141,11 @@ public class Spectate extends FoundationCommand implements Listener
 
             if(player != null)
             {
+                if(!(player.getGameMode() == GameMode.SPECTATOR))
+                {
+                    return;
+                }
+
                 if(locations.containsKey(player.getUniqueId()))
                 {
                     player.teleport(locations.get(player.getUniqueId()));

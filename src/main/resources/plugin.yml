@@ -57,3 +57,6 @@ commands:
   afk:
     description: Mark yourself as AFK
     usage: /afk
+  spectate:
+    description: Switch to spectator mode
+    usage: /spectator

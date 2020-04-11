@@ -44,6 +44,16 @@ public class Marker extends FoundationCommand
             case 1:
                 createMarker(player,args[0]);
                 return true;
+            case 2:
+                if(args[1].equalsIgnoreCase("remove"))
+                {
+                    removeMarker(player,args[0]);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             default:
                 return false;
         }
@@ -65,6 +75,24 @@ public class Marker extends FoundationCommand
         Location loc = player.getLocation();
         markers.put(name, loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
         doc.put("markers",markers);
+        player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("updated"));
+    }
+
+    private void removeMarker(Player player,String name)
+    {
+        PlayerDataWrapper data = core.dmgr.fetchData(player);
+        Document doc = data.getPlayerDocument();
+
+        Document markers = (Document) doc.get("markers");
+        if(markers == null)
+        {
+            markers = new Document();
+        }
+        if(doc.containsKey(name))
+        {
+            doc.remove(name);
+        }
+        player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("removed"));
     }
 
     private void listMarkers(Player player)

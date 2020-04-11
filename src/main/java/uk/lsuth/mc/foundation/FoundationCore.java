@@ -141,12 +141,20 @@ public class FoundationCore extends JavaPlugin
         {
             for(FoundationCommand cmd:md.getCommands())
             {
-                log.info("Registering command /" + cmd.getCommand());
-                this.getCommand(cmd.getCommand()).setExecutor(cmd);
-                if(cmd.completer != null)
+                try
                 {
-                    System.out.println("not null!");
-                    this.getCommand(cmd.getCommand()).setTabCompleter(cmd.completer);
+                    log.info("Registering command /" + cmd.getCommand());
+                    this.getCommand(cmd.getCommand()).setExecutor(cmd);
+                    if (cmd.completer != null)
+                    {
+                        System.out.println("not null!");
+                        this.getCommand(cmd.getCommand()).setTabCompleter(cmd.completer);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.severe("Failed to register command");
+                    e.printStackTrace();
                 }
             }
         }
