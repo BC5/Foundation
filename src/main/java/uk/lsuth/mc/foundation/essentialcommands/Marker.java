@@ -121,14 +121,16 @@ public class Marker extends FoundationCommand
                 newtxt = newtxt.replaceFirst("\\{y}",coords[1]);
                 newtxt = newtxt.replaceFirst("\\{z}",coords[2]);
 
-                TextComponent textComponent = new TextComponent(newtxt);
+                TextComponent textComponent = new TextComponent(TextComponent.fromLegacyText(newtxt));
 
-                if(player.hasPermission("foundation.teleport") || (player.hasPermission("foundation.beaconWarp") && BeaconUtils.isStandingOnBeacon(player)))
+                if(player.hasPermission("foundation.teleport") || (player.hasPermission("foundation.beaconwarp") && BeaconUtils.isStandingOnBeacon(player)))
                 {
-                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"tp " + entry.getKey()));
+                    System.out.println("test");
+
+                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/tp " + entry.getKey()));
                 }
 
-                player.sendMessage(newtxt);
+                player.sendMessage(textComponent);
             }
         }
     }

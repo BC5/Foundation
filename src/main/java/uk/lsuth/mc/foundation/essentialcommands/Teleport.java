@@ -50,7 +50,7 @@ public class Teleport extends FoundationCommand
                 loc = loc.subtract(0,1,0);
                 Block standingOn = sender.getWorld().getBlockAt(loc);
 
-                if(standingOn.getType() == Material.BEACON)
+                if(BeaconUtils.isStandingOnBeacon(sender))
                 {
                     if(BeaconUtils.beaconIsTier(standingOn,4,Material.DIAMOND_BLOCK))
                     {
