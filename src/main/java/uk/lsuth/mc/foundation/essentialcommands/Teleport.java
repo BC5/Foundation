@@ -4,8 +4,6 @@ import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
+import uk.lsuth.mc.foundation.beacon.BeaconUtils;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
 import java.util.Map;
@@ -53,7 +52,7 @@ public class Teleport extends FoundationCommand
 
                 if(standingOn.getType() == Material.BEACON)
                 {
-                    if(beaconValid(standingOn))
+                    if(BeaconUtils.beaconIsTier(standingOn,4,Material.DIAMOND_BLOCK))
                     {
                         beaconTP = true;
                     }
@@ -243,36 +242,5 @@ public class Teleport extends FoundationCommand
         return input;
     }
 
-    private static boolean beaconValid(Block beacon)
-    {
-        Beacon beaconState = (Beacon) beacon.getState();
 
-        if(beaconState.getTier() == 4)
-        {
-            World w = beacon.getWorld();
-            Location location = beacon.getLocation();
-            for(int i = 0; i < 4; i++)
-            {
-                Location loc0 = location.clone().subtract(1+i,1+i,1+i);
-                System.out.println("i:" + i);
-                for(int deltaX = 0; deltaX < 3+(2*i); deltaX++)
-                {
-                    System.out.println("dX:" + deltaX);
-                    for(int deltaZ = 0; deltaZ < 3+(2*i); deltaZ++)
-                    {
-                        System.out.println("dZ:" + deltaZ);
-                        if (!(w.getBlockAt(loc0.clone().add(deltaX, 0, deltaZ)).getType() == Material.DIAMOND_BLOCK))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }
