@@ -1,19 +1,17 @@
 package uk.lsuth.mc.foundation.railroute;
 
 import com.google.common.base.Predicates;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.type.RedstoneRail;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -25,24 +23,87 @@ public class RailListener implements Listener
 {
     FoundationCore core;
 
+    private static final Particle.DustOptions dustOptions = new Particle.DustOptions(Color.YELLOW,1);
+
     public RailListener(FoundationCore core)
     {
         this.core = core;
     }
 
     @EventHandler
-    private void detectorRail(EntityInteractEvent event)
+    private void minecartMove(VehicleMoveEvent e)
     {
-        if(event.getEntityType() == EntityType.MINECART)
+        if(e.getVehicle() instanceof Minecart)
         {
-            if(event.getBlock().getType() == Material.DETECTOR_RAIL)
+            Minecart minecart = (Minecart) e.getVehicle();
+            World world = minecart.getWorld();
+            Location location = minecart.getLocation();
+            location.setY(location.getY()-1);
+            Block blockBelow = location.getBlock();
+
+            if(blockBelow.getType() == Material.IRON_BLOCK)
             {
-                System.out.println("test");
-                event.setCancelled(true);
+                minecart.setMaxSpeed(0.4d * 8);
+                //System.out.println(minecart.getVelocity().length());
+                world.spawnParticle(Particle.REDSTONE,location,5,0.05d,0.2d,0.05d,dustOptions);
+            }
+            else
+            {
+                minecart.setMaxSpeed(0.4d);
+            }
+        }
+    }
+
+    /*
+    @EventHandler
+    private void minecartRunOver(VehicleEntityCollisionEvent e)
+    {
+        if(e.getVehicle() instanceof Minecart)
+        {
+            Minecart minecart = (Minecart) e.getVehicle();
+            Double speed = minecart.getVelocity().length();
+            if(speed > 2)
+            {
+                Entity entity = e.getEntity();
+                if(entity instanceof LivingEntity)
+                {
+                    LivingEntity livingEntity = (LivingEntity) entity;
+
+                    livingEntity.damage((speed-2)*10,minecart);
+                    if(livingEntity.isDead())
+                    {
+                        e.setCollisionCancelled(true);
+                    }
+                }
             }
 
         }
     }
+
+    @EventHandler
+    private void death(PlayerDeathEvent e)
+    {
+        Player victim = e.getEntity();
+        if(victim.getLastDamageCause() instanceof EntityDamageByEntityEvent)
+        {
+            if(((EntityDamageByEntityEvent) victim.getLastDamageCause()).getDamager() instanceof Minecart)
+            {
+                Minecart minecart = (Minecart) victim.getKiller();
+                if (minecart.getPassengers().size() != 0 && minecart.getPassengers().get(0) instanceof Player)
+                {
+                    Player murderer = (Player) minecart.getPassengers().get(0);
+
+                    e.setDeathMessage(murderer.getDisplayName() + " ran over " + victim.getDisplayName());
+                    victim.setKiller(murderer);
+                }
+                else
+                {
+                    e.setDeathMessage(victim.getDisplayName() + " was ran over by a minecart");
+                }
+            }
+        }
+    }
+    */
 
     @EventHandler
     private void redstoneChange(BlockRedstoneEvent event)

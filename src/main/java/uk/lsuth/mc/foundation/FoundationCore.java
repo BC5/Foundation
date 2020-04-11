@@ -56,10 +56,17 @@ public class FoundationCore extends JavaPlugin
 
         log.info("Loading modules");
         modules = new ArrayList<Module>();
-        modules.add(new EssentialsModule(this));
-        modules.add(new Prefab());
+
         EconomyModule eco = new EconomyModule(this);
         modules.add(eco);
+
+        log.info("Registering Economy");
+        PluginManager pluginManager = getServer().getPluginManager();
+        Plugin vault = pluginManager.getPlugin("Vault");
+        Bukkit.getServicesManager().register(Economy.class,eco,vault, ServicePriority.High);
+
+        modules.add(new EssentialsModule(this,eco));
+        modules.add(new Prefab());
         modules.add(new ChatModule(this));
         modules.add(new PVPModule(this));
 
@@ -67,7 +74,7 @@ public class FoundationCore extends JavaPlugin
 
         registerCommands();
 
-        PluginManager pluginManager = getServer().getPluginManager();
+
 
         log.info("Hooking listeners");
         //Module listeners
@@ -77,9 +84,7 @@ public class FoundationCore extends JavaPlugin
         pluginManager.registerEvents(new PlayerListener(this),this);
         pluginManager.registerEvents(new RailListener(this),this);
 
-        log.info("Registering Economy");
-        Plugin vault = pluginManager.getPlugin("Vault");
-        Bukkit.getServicesManager().register(Economy.class,eco,vault, ServicePriority.High);
+
     }
 
     public FileConfiguration getConfiguration()

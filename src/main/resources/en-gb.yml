@@ -4,6 +4,7 @@ cmds:
     teleportToLocation: §6Teleporting to §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
     teleportToMarker: §6Teleporting to §d{x}
     noSuchTeleport: §6No marker or player by that name
+    notValidBeacon: §cThis beacon isn't a Tier-4 Diamond Beacon
   bal:
     balanceMessage: §6You have §a{x}§6 available
   nickname:
@@ -17,13 +18,15 @@ cmds:
     markerTitle: §eMarkers
     markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
   mail:
-    noPlayer: §6Couldn't find player §f{x}
-    sent: §6Sent §e{w} §b{x}§6 to §f{y} §6at a cost of §a{z}
-    notify: §eYou have mail!
-    hand: §6You aren't holding anything.
-    recipientFull: §f{x} §6 doesn't have enough space in their mailbox for your delivery
+    noPlayer: "§6Couldn't find player §f{x}"
+    sent: "§6Sent §e{w} §b{x}§6 to §f{y} §6at a cost of §a{z}"
+    notify: "§eYou have mail!"
+    hand: "§6You aren't holding anything."
+    notEnough: "§6You don't have enough"
+    recipientFull: "§f{x} §6 doesn't have enough space in their mailbox for your delivery"
     sender: "§r§eSender:"
-    guiMailbox: §5Mailbox
+    guiMailbox: "§5Mailbox"
+    insufficientFunds: "§6You don't have enough money to pay the {x} oversized mail fee"
   navigate:
     navReset: §6Your compass has been reset to spawn
     navSet: §6Your compass has been set to marker §d{x}
@@ -44,6 +47,14 @@ cmds:
     noPlayer: §6Couldn't find player §f{x}
     format: "§a{player} §fto you §d>>§e {message}"
     inverseFormat: "§fYou to §a{player}  §d>>§e {message}"
+  afk:
+    afk: "You are now marked as afk"
+    afk-off: "You are no longer marked as afk"
+  spectate:
+    spectator: "§6You've been switched to §bSpectator Mode"
+    inDanger: "§cYou can't switch to Spectator Mode when you're in combat"
+    survival: "§6You've been switched to §aSurvival Mode"
+    spectatorRemoved: "§cYou've been automatically switched to §aSurvival Mode"
 
 perm:
   noPermission: §4You aren't allowed to do that.
@@ -65,3 +76,5 @@ pvp:
   behead: "{x} was decapitated by {y}"
   murder: "{x} was murdered by {y}"
   headLore: "§4Killed by §c{x}"
+
+

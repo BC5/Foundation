@@ -36,7 +36,7 @@ public class Message extends FoundationCommand
 
             for(int i = 1; i < args.length; i++)
             {
-                msg = msg + args[i];
+                msg = msg + args[i] + " ";
             }
 
             String msg1 = strings.get("format").replace("{player}",sender.getName()).replace("{message}",msg);

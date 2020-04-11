@@ -1,6 +1,7 @@
 package uk.lsuth.mc.foundation.chat;
 
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,11 +30,12 @@ public class ChatManager implements Listener
         this.dmgr = dmgr;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void chatEvent(AsyncPlayerChatEvent event)
     {
         String msg = builder.build(event.getPlayer(), event.getMessage());
-        event.setFormat(msg);
+        event.setCancelled(true);
+        Bukkit.getServer().broadcastMessage(msg);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

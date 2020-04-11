@@ -3,3 +3,7 @@ pvp:
   beheading: true
   keepItemsOnMurder: true
   experiencePenalty: 0.25
+mail:
+  shulkerFee: 5
+spectator:
+  ticksAllowed: 6000

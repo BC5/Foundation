@@ -2,10 +2,17 @@ package uk.lsuth.mc.foundation.essentialcommands;
 
 import org.bson.Document;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.block.Beacon;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
@@ -34,10 +41,39 @@ public class Teleport extends FoundationCommand
         }
         Player sender = (Player) cmdsender;
 
+        boolean beaconTP = false;
+
         if(!(sender.hasPermission("foundation.teleport")))
         {
-            sender.sendMessage(FoundationCore.noPermission);
-            return true;
+            if(sender.hasPermission("foundation.beaconwarp"))
+            {
+                Location loc = sender.getLocation();
+                loc = loc.subtract(0,1,0);
+                Block standingOn = sender.getWorld().getBlockAt(loc);
+
+                if(standingOn.getType() == Material.BEACON)
+                {
+                    if(beaconValid(standingOn))
+                    {
+                        beaconTP = true;
+                    }
+                    else
+                    {
+                        sender.sendMessage(strings.get("notValidBeacon"));
+                        return true;
+                    }
+                }
+                else
+                {
+                    sender.sendMessage(FoundationCore.noPermission);
+                    return true;
+                }
+            }
+            else
+            {
+                sender.sendMessage(FoundationCore.noPermission);
+                return true;
+            }
         }
 
         switch (args.length)
@@ -170,6 +206,12 @@ public class Teleport extends FoundationCommand
                 sender.sendMessage(formatCoords(pos,strings.get("teleportToLocation")));
                 //sender.sendMessage("§6Teleporting to §f[§cX:" + (int) pos[0] + "§f] [§aY:" + (int) pos[1] + "§f] [§bZ: " + (int) pos[2] + "§f]");
                 sender.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+                if(beaconTP)
+                {
+                    PotionEffect nausea = new PotionEffect(PotionEffectType.CONFUSION,100,1);
+                    sender.addPotionEffect(nausea);
+                    sender.playSound(sender.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE,1,0.75f);
+                }
                 break;
 
             default:
@@ -199,5 +241,38 @@ public class Teleport extends FoundationCommand
         input = input.replaceFirst("\\{y}",Integer.toString(y));
         input = input.replaceFirst("\\{z}",Integer.toString(z));
         return input;
+    }
+
+    private static boolean beaconValid(Block beacon)
+    {
+        Beacon beaconState = (Beacon) beacon.getState();
+
+        if(beaconState.getTier() == 4)
+        {
+            World w = beacon.getWorld();
+            Location location = beacon.getLocation();
+            for(int i = 0; i < 4; i++)
+            {
+                Location loc0 = location.clone().subtract(1+i,1+i,1+i);
+                System.out.println("i:" + i);
+                for(int deltaX = 0; deltaX < 3+(2*i); deltaX++)
+                {
+                    System.out.println("dX:" + deltaX);
+                    for(int deltaZ = 0; deltaZ < 3+(2*i); deltaZ++)
+                    {
+                        System.out.println("dZ:" + deltaZ);
+                        if (!(w.getBlockAt(loc0.clone().add(deltaX, 0, deltaZ)).getType() == Material.DIAMOND_BLOCK))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

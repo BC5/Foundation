@@ -1,5 +1,6 @@
 package uk.lsuth.mc.foundation.essentialcommands;
 
+import net.milkbowl.vault.economy.Economy;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,11 +31,13 @@ public class Mail extends FoundationCommand
     Map<String,String> strings;
     protected static NamespacedKey deliveryIDKey;
 
+    Economy eco;
 
-    public Mail(FoundationCore core)
+    public Mail(FoundationCore core, Economy eco)
     {
         super("mail");
         this.core = core;
+        this.eco = eco;
         strings = core.getLmgr().getCommandStrings(this.getCommand());
         deliveryIDKey = new NamespacedKey(core,"delivery-id");
         this.completer = new MailTabComplete();
@@ -47,7 +50,7 @@ public class Mail extends FoundationCommand
         {
             Player mailSender = (Player) sender;
 
-            if(args.length == 2)
+            if(args.length == 2 || args.length == 3)
             {
                 if(args[0].equals("send"))
                 {
@@ -85,8 +88,42 @@ public class Mail extends FoundationCommand
                     }
 
                     //Get player's hand
-                    ItemStack toSend = mailSender.getInventory().getItemInMainHand();
+                    ItemStack playerHand = mailSender.getInventory().getItemInMainHand();
+                    ItemStack toSend = playerHand;
 
+                    if(args.length == 3)
+                    {
+                        int amnt;
+
+                        try
+                        {
+                            if (args[2].charAt(args[2].length() - 1) == 's')
+                            {
+                                amnt = Integer.parseInt(args[2].substring(0, args[2].length() - 2));
+                            }
+                            else
+                            {
+                                amnt = Integer.parseInt(args[2]);
+                            }
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            core.log.warning("Invalid amount: " + args[2]);
+                            return false;
+                        }
+
+                        if(toSend.getAmount() >= amnt)
+                        {
+                            ItemStack newStack = toSend.clone();
+                            newStack.setAmount(amnt);
+                            toSend = newStack;
+                        }
+                        else
+                        {
+                            sender.sendMessage(strings.get("notEnough"));
+                            return true;
+                        }
+                    }
 
                     if(toSend == null)
                     {
@@ -108,6 +145,17 @@ public class Mail extends FoundationCommand
                     }
                     else
                     {
+                        int fee = 0;
+                        if(toSend.getType() == Material.SHULKER_BOX)
+                        {
+                            fee = core.getConfiguration().getInt("mail.shulkerFee");
+                            if(!eco.has(mailSender,fee))
+                            {
+                                mailSender.sendMessage(strings.get("insufficientFunds").replace("{x}",Integer.toString(fee)));
+                                return true;
+                            }
+                        }
+
                         List<Document> mailbox = (List<Document>) recipientDocument.get("mailbox");
 
                         if(mailbox == null)
@@ -148,7 +196,7 @@ public class Mail extends FoundationCommand
                         msg = msg.replace("{w}",toSend.getAmount() + "");
                         msg = msg.replace("{x}",core.getLmgr().getLocalisedName(toSend,true));
                         msg = msg.replace("{y}",args[1]);
-                        msg = msg.replace("{z}","0");
+                        msg = msg.replace("{z}",eco.format(fee));
 
                         mailSender.sendMessage(msg);
                         if(recipient instanceof Player)
@@ -157,7 +205,20 @@ public class Mail extends FoundationCommand
                         }
 
                         //Remove from initial inventory
-                        mailSender.getInventory().removeItem(toSend);
+                        if(toSend == playerHand)
+                        {
+                            mailSender.getInventory().removeItem(playerHand);
+                        }
+                        else
+                        {
+                            playerHand.setAmount(playerHand.getAmount() - toSend.getAmount());
+                        }
+
+                        //Charge fee
+                        if(fee != 0)
+                        {
+                            eco.withdrawPlayer(mailSender,fee);
+                        }
 
                         //If offlineplayer, unload
                         if(offline)

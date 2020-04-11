@@ -2,7 +2,7 @@ name: Foundation
 version: Alpha 0
 main: uk.lsuth.mc.foundation.FoundationCore
 
-api-version: 1.13
+api-version: 1.15
 depend: [Vault]
 
 commands:
@@ -54,3 +54,6 @@ commands:
   transfer:
     description: Used to transfer money to other players
     usage: /transfer <player> <amount>
+  afk:
+    description: Mark yourself as AFK
+    usage: /afk
