@@ -1,5 +1,7 @@
 package uk.lsuth.mc.foundation.essentialcommands;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -7,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
+import uk.lsuth.mc.foundation.beacon.BeaconUtils;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
 import java.util.Map;
@@ -117,6 +120,14 @@ public class Marker extends FoundationCommand
                 newtxt = newtxt.replaceFirst("\\{x}",coords[0]);
                 newtxt = newtxt.replaceFirst("\\{y}",coords[1]);
                 newtxt = newtxt.replaceFirst("\\{z}",coords[2]);
+
+                TextComponent textComponent = new TextComponent(newtxt);
+
+                if(player.hasPermission("foundation.teleport") || (player.hasPermission("foundation.beaconWarp") && BeaconUtils.isStandingOnBeacon(player)))
+                {
+                    textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"tp " + entry.getKey()));
+                }
+
                 player.sendMessage(newtxt);
             }
         }
