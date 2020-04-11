@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -35,6 +36,21 @@ public class Spectate extends FoundationCommand implements Listener
         this.core = core;
         strings = core.getLmgr().getCommandStrings("spectate");
     }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent e)
+    {
+        if(e.getPlayer().hasPermission("foundation.spectateOthers"))
+        {
+            return;
+        }
+
+        if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE)
+        {
+            e.setCancelled(true);
+        }
+    }
+
 
     @EventHandler
     public void onDisconnect(PlayerQuitEvent e)
