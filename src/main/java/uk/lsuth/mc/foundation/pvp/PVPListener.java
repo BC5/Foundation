@@ -1,5 +1,6 @@
 package uk.lsuth.mc.foundation.pvp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -9,9 +10,14 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 public class PVPListener implements Listener
 {
@@ -55,17 +61,30 @@ public class PVPListener implements Listener
             if(cfg.getBoolean("pvp.keepItemsOnMurder"))
             {
                 e.setKeepInventory(true);
+                e.setKeepLevel(true);
 
                 //Remove drops
                 e.getDrops().clear();
+                e.setDroppedExp(0);
 
-                victim.getTotalExperience();
+                //victim.getTotalExperience();
 
-                int original = victim.getLevel();
-                float penalty = (float) cfg.getDouble("pvp.experiencePenalty");
+                //int original = victim.getLevel();
+                //float penalty = (float) cfg.getDouble("pvp.experiencePenalty");
 
-                e.setNewExp( (int) (original * 1-penalty) );
-                e.setDroppedExp(original * 10);
+                //e.setNewExp( (int) (original * 1-penalty) );
+                //e.setDroppedExp(original * 10);
+            }
+
+            //Subtract from scoreboard
+            ScoreboardManager manager = Bukkit.getScoreboardManager();
+            Scoreboard scoreboard = manager.getMainScoreboard();
+            Set<Objective> objectiveSet = scoreboard.getObjectivesByCriteria("deathCount");
+
+            for(Objective obj:objectiveSet)
+            {
+                Score deathScore = obj.getScore(victim);
+                deathScore.setScore(deathScore.getScore() - 1);
             }
 
             //Update Death Message
