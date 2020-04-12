@@ -40,6 +40,7 @@ public class EssentialsModule implements Module
         cmds.add(new Navigate(plugin));
         cmds.add(new Mail(plugin,eco));
         cmds.add(new Message(plugin));
+        cmds.add(new RidePeen(plugin));
         Spectate s = new Spectate(plugin);
         cmds.add(s); listenerList.add(s);
         //cmds.add(new AFK(plugin.getLmgr().getCommandStrings("afk"))); //This doesn't work. Paper's fault

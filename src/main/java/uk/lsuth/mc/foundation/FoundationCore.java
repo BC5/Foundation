@@ -18,6 +18,7 @@ import uk.lsuth.mc.foundation.data.PlayerListener;
 import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
 import uk.lsuth.mc.foundation.language.LanguageManager;
+import uk.lsuth.mc.foundation.management.ManagementModule;
 import uk.lsuth.mc.foundation.pvp.PVPModule;
 import uk.lsuth.mc.foundation.railroute.RailListener;
 import uk.lsuth.mc.foundation.structure.Prefab;
@@ -71,6 +72,7 @@ public class FoundationCore extends JavaPlugin
         modules.add(new ChatModule(this));
         modules.add(new PVPModule(this));
         modules.add(new BeaconUtils());
+        modules.add(new ManagementModule(this));
 
         dmgr.setTemplate(assembleTemplate());
 

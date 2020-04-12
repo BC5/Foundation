@@ -19,6 +19,18 @@ cmds:
     noMarkers: §6You don't have any markers yet.
     markerTitle: §eMarkers
     markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
+  ride:
+    Peen: "§aYou are now riding Peen"
+    notPeen: "§cThat isn't Peen"
+    nothing: "§cThere's no Peen here"
+  shadowkick:
+    noSuchPlayer: "§cCouldn't find player"
+    success: "§cNo longer sending keepAlive packets to §a{x}"
+    alreadyKicking: "§a{x}§c is currently being kicked. This may take up to 20 seconds"
+  shadowban:
+    ban: "§a{x} §chas been shadowbanned"
+    unban: "§a{x} §chas been unshadowbanned"
+    noSuchPlayer: "§cCouldn't find player"
   mail:
     noPlayer: "§6Couldn't find player §f{x}"
     sent: "§6Sent §e{w} §b{x}§6 to §f{y} §6at a cost of §a{z}"

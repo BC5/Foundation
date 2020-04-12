@@ -54,9 +54,18 @@ commands:
   transfer:
     description: Used to transfer money to other players
     usage: /transfer <player> <amount>
+  shadowkick:
+    description: Stop sending keepAlive packets to a player, causing their client to time out.
+    usage: /shadowkick <player>
+  shadowban:
+    description: On login, never send the Success packet to the player.
+    usage: /shadowban <player>
   afk:
     description: Mark yourself as AFK
     usage: /afk
   spectate:
     description: Switch to spectator mode
     usage: /spectator
+  ride:
+    description: Ride anything
+    usage: /ride
