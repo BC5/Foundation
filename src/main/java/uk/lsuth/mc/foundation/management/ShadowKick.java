@@ -47,6 +47,12 @@ public class ShadowKick extends FoundationCommand
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if(!(sender.hasPermission("foundation.management.shadowkick")))
+        {
+            sender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         Server server = Bukkit.getServer();
         Player toKick = server.getPlayer(args[0]);
 

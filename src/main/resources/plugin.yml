@@ -43,6 +43,9 @@ commands:
   marker:
     description: Create or list markers
     usage: /marker, /marker <name>
+  freeze:
+    description: Freeze a player
+    usage: /freeze <player>
   navigate:
     description: Point your compass in the direction of a marker
     usage: /navigate, /navigate <marker>
@@ -54,6 +57,9 @@ commands:
   transfer:
     description: Used to transfer money to other players
     usage: /transfer <player> <amount>
+  assemble:
+    description: Call all mobs to you
+    usage: /assemble
   shadowkick:
     description: Stop sending keepAlive packets to a player, causing their client to time out.
     usage: /shadowkick <player>

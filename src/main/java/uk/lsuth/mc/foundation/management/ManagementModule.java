@@ -12,11 +12,13 @@ import java.util.List;
 public class ManagementModule implements Module
 {
     ShadowKick shadowKick;
+    Freeze freeze;
     FoundationCore core;
 
     public ManagementModule(FoundationCore core)
     {
         shadowKick = new ShadowKick(core);
+        freeze = new Freeze(core);
         this.core = core;
     }
 
@@ -26,6 +28,7 @@ public class ManagementModule implements Module
         ArrayList<FoundationCommand> cmds = new ArrayList<FoundationCommand>();
         cmds.add(shadowKick);
         cmds.add(new ShadowBan(core));
+        cmds.add(freeze);
         return cmds;
     }
 
@@ -34,6 +37,7 @@ public class ManagementModule implements Module
     {
         ArrayList<Listener> listeners = new ArrayList<Listener>();
         listeners.add(shadowKick.getListener());
+        listeners.add(freeze);
         return listeners;
     }
 

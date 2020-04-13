@@ -39,6 +39,12 @@ public class ShadowBan extends FoundationCommand
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if(!(sender.hasPermission("foundation.management.shadowban")))
+        {
+            sender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         Server server = Bukkit.getServer();
         Player p = server.getPlayer(args[0]);
 

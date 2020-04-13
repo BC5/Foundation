@@ -23,6 +23,9 @@ cmds:
     Peen: "§aYou are now riding Peen"
     notPeen: "§cThat isn't Peen"
     nothing: "§cThere's no Peen here"
+  freeze:
+    freeze: "§a{x} §bis now frozen"
+    unfreeze: "§a{x} §bis no longer frozen"
   shadowkick:
     noSuchPlayer: "§cCouldn't find player"
     success: "§cNo longer sending keepAlive packets to §a{x}"

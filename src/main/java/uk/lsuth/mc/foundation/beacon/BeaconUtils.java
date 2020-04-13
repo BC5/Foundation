@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import uk.lsuth.mc.foundation.FoundationCommand;
+import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.Module;
 
 import java.util.ArrayList;
@@ -16,6 +17,13 @@ import java.util.List;
 
 public class BeaconUtils implements Module
 {
+    FoundationCore core;
+
+    public BeaconUtils(FoundationCore core)
+    {
+        this.core = core;
+    }
+
     public static int getBeaconTier(Block beacon)
     {
         Beacon beaconState = (Beacon) beacon.getState();
@@ -86,7 +94,7 @@ public class BeaconUtils implements Module
     {
         ArrayList<Listener> listenerList = new ArrayList<Listener>();
         listenerList.add(new LevitationBeacon());
-
+        listenerList.add(new PhantomDisabler(core));
         return listenerList;
     }
 
