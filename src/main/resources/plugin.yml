@@ -51,6 +51,9 @@ commands:
     usage: /navigate, /navigate <marker>
     aliases:
       - "nav"
+  announce:
+    description: Send an announcement to the entire server
+    usage: /announce <message>
   invoice:
     description: Used to demand money from other players, and pay other players
     usage: /invoice send <amount>, /invoice pay

@@ -8,3 +8,8 @@ mail:
   fee: 0
 spectator:
   ticksAllowed: 6000
+biomeChange:
+  chance: 25
+  onlyOverworld: true
+  bonemeal: true
+  naturalGrowth: true

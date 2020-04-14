@@ -23,6 +23,7 @@ import uk.lsuth.mc.foundation.pvp.PVPModule;
 import uk.lsuth.mc.foundation.railroute.Junction;
 import uk.lsuth.mc.foundation.railroute.RailListener;
 import uk.lsuth.mc.foundation.structure.Prefab;
+import uk.lsuth.mc.foundation.world.WorldModule;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public class FoundationCore extends JavaPlugin
         modules.add(new PVPModule(this));
         modules.add(new BeaconUtils(this));
         modules.add(new ManagementModule(this));
+        modules.add(new WorldModule(this));
 
         dmgr.setTemplate(assembleTemplate());
 
