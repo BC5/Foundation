@@ -29,6 +29,7 @@ public class ManagementModule implements Module
         cmds.add(shadowKick);
         cmds.add(new ShadowBan(core));
         cmds.add(freeze);
+        cmds.add(new Announce(core.getLmgr().getCommandStrings("announce")));
         return cmds;
     }
 
