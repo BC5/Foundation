@@ -4,6 +4,7 @@ import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -95,6 +96,13 @@ public class Teleport extends FoundationCommand
                     x = Integer.parseInt(coordsarr[0]);
                     y = Integer.parseInt(coordsarr[1]);
                     z = Integer.parseInt(coordsarr[2]);
+
+                    if(sender.getWorld().getEnvironment() == World.Environment.NETHER)
+                    {
+                        x = x/8;
+                        z = z/8;
+                    }
+
                     Location loc = new Location(sender.getWorld(),x,y,z);
                     sender.sendMessage(strings.get("teleportToMarker").replace("{x}",args[0]));
                     sender.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);

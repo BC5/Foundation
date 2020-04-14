@@ -14,11 +14,12 @@ cmds:
     mintMessage: §6Minted §a{x}
     mintFailure: §6You don't have enough diamonds
   marker:
-    updated: §6Marker set!
-    removed: §6Marker removed
-    noMarkers: §6You don't have any markers yet.
-    markerTitle: §eMarkers
-    markerEntry: §d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]
+    updated: "§6Marker set!"
+    removed: "§6Marker removed"
+    noMarkers: "§6You don't have any markers yet."
+    markerTitle: "§eMarkers §2(§aOverworld Coordinates§2)"
+    markerTitleNether: "§eMarkers §5(§dNether Coordinates§5)"
+    markerEntry: "§d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]"
   ride:
     Peen: "§aYou are now riding Peen"
     notPeen: "§cThat isn't Peen"
@@ -72,6 +73,8 @@ cmds:
     hurt: "§cYou can't switch to Spectator Mode when you're hurt"
     survival: "§6You've been switched to §aSurvival Mode"
     spectatorRemoved: "§cYou've been automatically switched to §aSurvival Mode"
+  announce:
+    format: "§d§lAnnouncement §a>>§r {message}"
 
 perm:
   noPermission: §4You aren't allowed to do that.

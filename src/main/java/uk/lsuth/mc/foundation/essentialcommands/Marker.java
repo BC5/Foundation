@@ -4,6 +4,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,13 +40,19 @@ public class Marker extends FoundationCommand
             return true;
         }
 
+        boolean nether = false;
+        if(player.getWorld().getEnvironment() == World.Environment.NETHER)
+        {
+            nether = true;
+        }
+
         switch(args.length)
         {
             case 0:
-                listMarkers(player);
+                listMarkers(player,nether);
                 return true;
             case 1:
-                createMarker(player,args[0]);
+                createMarker(player,args[0],nether);
                 return true;
             case 2:
                 if(args[1].equalsIgnoreCase("remove"))
@@ -62,10 +69,8 @@ public class Marker extends FoundationCommand
         }
     }
 
-    private void createMarker(Player player,String name)
+    private void createMarker(Player player,String name,boolean nether)
     {
-
-
         PlayerDataWrapper data = core.dmgr.fetchData(player);
         Document doc = data.getPlayerDocument();
 
@@ -76,7 +81,16 @@ public class Marker extends FoundationCommand
         }
 
         Location loc = player.getLocation();
-        markers.put(name, loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+
+        if(nether)
+        {
+            markers.put(name, loc.getBlockX()*8 + "," + loc.getBlockY() + "," + loc.getBlockZ()*8);
+        }
+        else
+        {
+            markers.put(name, loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+        }
+
         doc.put("markers",markers);
         player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("updated"));
     }
@@ -98,7 +112,7 @@ public class Marker extends FoundationCommand
         player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("removed"));
     }
 
-    private void listMarkers(Player player)
+    private void listMarkers(Player player, boolean nether)
     {
         PlayerDataWrapper data = core.dmgr.fetchData(player);
         Document doc = data.getPlayerDocument();
@@ -110,16 +124,40 @@ public class Marker extends FoundationCommand
         }
         else
         {
-            player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("markerTitle"));
+            if(nether)
+            {
+                player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("markerTitleNether"));
+            }
+            else
+            {
+                player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("markerTitle"));
+            }
+
             String txt = core.getLmgr().getCommandStrings(this.getCommand()).get("markerEntry");
 
             for(Map.Entry<String,Object> entry:markers.entrySet())
             {
                 String newtxt = txt.replaceFirst("\\{a}",entry.getKey());
                 String[] coords = ((String) entry.getValue()).split(",");
-                newtxt = newtxt.replaceFirst("\\{x}",coords[0]);
-                newtxt = newtxt.replaceFirst("\\{y}",coords[1]);
-                newtxt = newtxt.replaceFirst("\\{z}",coords[2]);
+
+                if (nether)
+                {
+                    int[] netherCoords = new int[3];
+                    netherCoords[0] = Integer.parseInt(coords[0]) / 8;
+                    netherCoords[1] = Integer.parseInt(coords[1]);
+                    netherCoords[2] = Integer.parseInt(coords[2]) / 8;
+
+                    newtxt = newtxt.replaceFirst("\\{x}",Integer.toString(netherCoords[0]));
+                    newtxt = newtxt.replaceFirst("\\{y}",Integer.toString(netherCoords[1]));
+                    newtxt = newtxt.replaceFirst("\\{z}",Integer.toString(netherCoords[2]));
+                }
+                else
+                {
+                    newtxt = newtxt.replaceFirst("\\{x}",coords[0]);
+                    newtxt = newtxt.replaceFirst("\\{y}",coords[1]);
+                    newtxt = newtxt.replaceFirst("\\{z}",coords[2]);
+                }
+
 
                 TextComponent textComponent = new TextComponent(TextComponent.fromLegacyText(newtxt));
 
