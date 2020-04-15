@@ -43,8 +43,6 @@ public class PhantomDisabler implements Listener
                 phantom.getWorld().strikeLightningEffect(phantom.getLocation());
                 phantom.remove();
 
-                System.out.println(phantom.getPathfinder().findPath(beacon.getRelative(0,10,0).getLocation()));
-
                 new BukkitRunnable()
                 {
 
