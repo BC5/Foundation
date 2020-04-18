@@ -20,6 +20,13 @@ cmds:
     markerTitle: "§eMarkers §2(§aOverworld Coordinates§2)"
     markerTitleNether: "§eMarkers §5(§dNether Coordinates§5)"
     markerEntry: "§d{a} - §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]"
+  where:
+    is: "§a{player} §6is in §9{world} §6@ §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]"
+    are: "§dYou §6are in §9{world} §6@ §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]"
+    hover: "§6Region: §f[§cX:{rx}§f] [§bZ:{rz}§f]§6, Chunk: §f[§cX:{cx}§f] [§bZ:{cz}§f]"
+    noPlayer: "§cCouldn't find player"
+  restart:
+    bar: "Restarting Server"
   ride:
     Peen: "§aYou are now riding Peen"
     notPeen: "§cThat isn't Peen"

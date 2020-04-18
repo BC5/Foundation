@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 
 public class MessageBuilder
 {
@@ -28,6 +29,36 @@ public class MessageBuilder
         msg = msg.replace("{player}",player);
         msg = msg.replace("{prefix}", prefix);
         return msg;
+    }
+
+    public static String formatCoordinate(Matcher m)
+    {
+        String format = "§2[§cX:{x}§2] [§aY:{y}§2] [§bZ:{z}§2]";
+
+        //System.out.println("\""+m.group(1)+"\"");
+
+        if(m.group("n") != null)
+        {
+            if(m.group("n").equals("nether "))
+            {
+                format = "§5[§cX:{x}§5] [§aY:{y}§5] [§bZ:{z}§5]";
+            }
+        }
+
+        format = format.replace("{x}",m.group("x"));
+        format = format.replace("{y}",m.group("y"));
+        format = format.replace("{z}",m.group("z"));
+
+        return format;
+    }
+
+    public static int[] getCoords(Matcher m)
+    {
+        int[] coords = new int[3];
+        coords[0] = Integer.parseInt(m.group("x"));
+        coords[1] = Integer.parseInt(m.group("y"));
+        coords[2] = Integer.parseInt(m.group("z"));
+        return coords;
     }
 
     public String buildJoinMessage(Player player)

@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.beacon.BeaconUtils;
+import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
+import uk.lsuth.mc.foundation.language.LanguageManager;
 
 import java.util.Map;
 
@@ -69,9 +71,9 @@ public class Marker extends FoundationCommand
         }
     }
 
-    private void createMarker(Player player,String name,boolean nether)
+    public static void createMarker(DataManager dmgr, LanguageManager lmgr, Location loc, Player player, String name, boolean nether)
     {
-        PlayerDataWrapper data = core.dmgr.fetchData(player);
+        PlayerDataWrapper data = dmgr.fetchData(player);
         Document doc = data.getPlayerDocument();
 
         Document markers = (Document) doc.get("markers");
@@ -79,8 +81,6 @@ public class Marker extends FoundationCommand
         {
             markers = new Document();
         }
-
-        Location loc = player.getLocation();
 
         if(nether)
         {
@@ -92,7 +92,17 @@ public class Marker extends FoundationCommand
         }
 
         doc.put("markers",markers);
-        player.sendMessage(core.getLmgr().getCommandStrings(this.getCommand()).get("updated"));
+        player.sendMessage(lmgr.getCommandStrings("marker").get("updated"));
+    }
+
+    private void createMarker(Location location, Player player, String name, boolean nether)
+    {
+        createMarker(core.getDmgr(),core.getLmgr(),location,player,name,nether);
+    }
+
+    private void createMarker(Player player,String name,boolean nether)
+    {
+        createMarker(player.getLocation(),player,name,nether);
     }
 
     private void removeMarker(Player player,String name)

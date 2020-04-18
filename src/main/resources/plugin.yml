@@ -3,7 +3,7 @@ version: Alpha 0
 main: uk.lsuth.mc.foundation.FoundationCore
 
 api-version: 1.15
-depend: [Vault]
+depend: [Vault,ProtocolLib]
 
 commands:
   tp:
@@ -51,9 +51,20 @@ commands:
     usage: /navigate, /navigate <marker>
     aliases:
       - "nav"
+  setmarker:
+    description: Set a marker using specified coordinates
+    usage: /setmarker <name> <x> <y> <z>, /setmarker <name> <x> <y> <z> <world>
   announce:
     description: Send an announcement to the entire server
     usage: /announce <message>
+  restart:
+    description: Restart the server
+    usage: /restart, /restart <time>
+    aliases:
+      - restartserver
+  where:
+    description: Locate a player
+    usage: /where is <player>, /where am I
   invoice:
     description: Used to demand money from other players, and pay other players
     usage: /invoice send <amount>, /invoice pay
