@@ -45,7 +45,7 @@ public class RailListener implements Listener
             {
                 minecart.setMaxSpeed(0.4d * 8);
                 //System.out.println(minecart.getVelocity().length());
-                world.spawnParticle(Particle.REDSTONE,location,5,0.05d,0.2d,0.05d,dustOptions);
+                world.spawnParticle(Particle.REDSTONE,minecart.getLocation(),5,0.05d,0.2d,0.05d,dustOptions);
             }
             else
             {
