@@ -30,6 +30,7 @@ public class WorldModule implements Module
         ArrayList<Listener> listeners = new ArrayList<Listener>();
         listeners.add(new BiomeChange(core));
         listeners.add(new StopEndermanGriefing());
+        listeners.add(new Slabber(core));
         return listeners;
     }
 
