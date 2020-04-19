@@ -12,16 +12,20 @@ import java.util.List;
 public class WorldModule implements Module
 {
     FoundationCore core;
+    Slabber slabber;
 
     public WorldModule(FoundationCore core)
     {
         this.core = core;
+        slabber = new Slabber(core);
     }
 
     @Override
     public List<FoundationCommand> getCommands()
     {
-        return new ArrayList<FoundationCommand>();
+        ArrayList<FoundationCommand> cmds = new ArrayList<FoundationCommand>();
+        cmds.add(slabber);
+        return cmds;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class WorldModule implements Module
         ArrayList<Listener> listeners = new ArrayList<Listener>();
         listeners.add(new BiomeChange(core));
         listeners.add(new StopEndermanGriefing());
-        listeners.add(new Slabber(core));
+        listeners.add(slabber);
         return listeners;
     }
 

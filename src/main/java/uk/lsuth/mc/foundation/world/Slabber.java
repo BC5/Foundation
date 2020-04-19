@@ -1,5 +1,6 @@
 package uk.lsuth.mc.foundation.world;
 
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -7,6 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,15 +18,26 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
+import uk.lsuth.mc.foundation.data.DataManager;
+import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
-public class Slabber implements Listener
+import java.util.Map;
+
+public class Slabber extends FoundationCommand implements Listener
 {
     FoundationCore core;
+    DataManager dmgr;
+
+    Map<String,String> strings;
 
     public Slabber(FoundationCore core)
     {
+        super("slab");
         this.core = core;
+        dmgr = core.getDmgr();
+        strings = core.getLmgr().getCommandStrings("slab");
         createRecipes();
     }
 
@@ -60,6 +74,8 @@ public class Slabber implements Listener
             }
             else
             {
+                if(!isSlabberEnabled(p)) return;
+
                 b.setType(x);
                 Slab y = (Slab) b.getBlockData();
                 y.setType(Slab.Type.DOUBLE);
@@ -351,5 +367,67 @@ public class Slabber implements Listener
 
                 Material.PRISMARINE_BRICK_SLAB
             };
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+        if(sender instanceof Player)
+        {
+            toggleSlabber((Player) sender);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private boolean isSlabberEnabled(Player p)
+    {
+        PlayerDataWrapper pdw = dmgr.fetchData(p);
+        Document pdoc = pdw.getPlayerDocument();
+
+        if(pdoc.containsKey("slabber"))
+        {
+            if(pdoc.getBoolean("slabber"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            pdoc.put("slabber",false);
+            return false;
+        }
+    }
+
+    private void toggleSlabber(Player p)
+    {
+        PlayerDataWrapper pdw = dmgr.fetchData(p);
+        Document pdoc = pdw.getPlayerDocument();
+
+        if(pdoc.containsKey("slabber"))
+        {
+            if(pdoc.getBoolean("slabber"))
+            {
+                pdoc.put("slabber",false);
+                p.sendMessage(strings.get("disabled"));
+            }
+            else
+            {
+                pdoc.put("slabber",true);
+                p.sendMessage(strings.get("enabled"));
+            }
+        }
+        else
+        {
+            pdoc.put("slabber",true);
+            p.sendMessage(strings.get("enabled"));
+        }
+    }
 
 }

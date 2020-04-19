@@ -23,6 +23,9 @@ commands:
     usage: /bal
     aliases:
       - "balance"
+  slab:
+    description: Toggle the conversion of blocks to half-slabs
+    usage: /slab
   msg:
     description: Message a friend secretly
     usage: /msg <player> <message>

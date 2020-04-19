@@ -25,6 +25,9 @@ cmds:
     are: "§dYou §6are in §9{world} §6@ §f[§cX:{x}§f] [§aY:{y}§f] [§bZ:{z}§f]"
     hover: "§6Region: §f[§cX:{rx}§f] [§bZ:{rz}§f]§6, Chunk: §f[§cX:{cx}§f] [§bZ:{cz}§f]"
     noPlayer: "§cCouldn't find player"
+  slab:
+    enabled: "§6Block -> Slab conversion has been §aenabled"
+    disabled: "§6Block -> Slab conversion has been §cdisabled"
   restart:
     bar: "Restarting Server"
   ride:
