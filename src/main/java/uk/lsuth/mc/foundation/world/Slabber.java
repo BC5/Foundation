@@ -23,6 +23,7 @@ import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Slabber extends FoundationCommand implements Listener
@@ -31,6 +32,53 @@ public class Slabber extends FoundationCommand implements Listener
     DataManager dmgr;
 
     Map<String,String> strings;
+
+    private static final Map<Material, Material> TO_SLABS = new HashMap<>();
+    private static final Map<Material, Material> TO_BLOCKS = new HashMap<>();
+
+    private static void registerMaterial(Material block, Material slab)
+    {
+        TO_SLABS.put(block, slab);
+        TO_BLOCKS.put(slab, block);
+    }
+
+    static
+    {
+        registerMaterial(Material.OAK_PLANKS, Material.OAK_SLAB);
+        registerMaterial(Material.BIRCH_PLANKS, Material.BIRCH_SLAB);
+        registerMaterial(Material.SPRUCE_PLANKS, Material.SPRUCE_SLAB);
+        registerMaterial(Material.JUNGLE_PLANKS, Material.JUNGLE_SLAB);
+        registerMaterial(Material.ACACIA_PLANKS, Material.ACACIA_SLAB);
+        registerMaterial(Material.DARK_OAK_PLANKS, Material.DARK_OAK_SLAB);
+        registerMaterial(Material.SANDSTONE, Material.SANDSTONE_SLAB);
+        registerMaterial(Material.SMOOTH_SANDSTONE, Material.SMOOTH_SANDSTONE_SLAB);
+        registerMaterial(Material.CUT_SANDSTONE, Material.CUT_SANDSTONE_SLAB);
+        registerMaterial(Material.RED_SANDSTONE, Material.RED_SANDSTONE_SLAB);
+        registerMaterial(Material.SMOOTH_RED_SANDSTONE, Material.SMOOTH_RED_SANDSTONE_SLAB);
+        registerMaterial(Material.CUT_RED_SANDSTONE, Material.CUT_RED_SANDSTONE_SLAB);
+        registerMaterial(Material.COBBLESTONE, Material.COBBLESTONE_SLAB);
+        registerMaterial(Material.STONE, Material.STONE_SLAB);
+        registerMaterial(Material.BRICK, Material.BRICK_SLAB);
+        registerMaterial(Material.STONE_BRICKS, Material.STONE_BRICK_SLAB);
+        registerMaterial(Material.MOSSY_STONE_BRICKS, Material.MOSSY_STONE_BRICK_SLAB);
+        registerMaterial(Material.QUARTZ_BLOCK, Material.QUARTZ_SLAB);
+        registerMaterial(Material.SMOOTH_QUARTZ, Material.SMOOTH_QUARTZ_SLAB);
+        registerMaterial(Material.NETHER_BRICK, Material.NETHER_BRICK_SLAB);
+        registerMaterial(Material.RED_NETHER_BRICKS, Material.RED_NETHER_BRICK_SLAB);
+        registerMaterial(Material.PURPUR_BLOCK, Material.PURPUR_SLAB);
+        registerMaterial(Material.SMOOTH_STONE, Material.SMOOTH_STONE_SLAB);
+        registerMaterial(Material.GRANITE, Material.GRANITE_SLAB);
+        registerMaterial(Material.POLISHED_GRANITE, Material.POLISHED_GRANITE_SLAB);
+        registerMaterial(Material.ANDESITE, Material.ANDESITE_SLAB);
+        registerMaterial(Material.POLISHED_ANDESITE, Material.POLISHED_ANDESITE_SLAB);
+        registerMaterial(Material.DIORITE, Material.DIORITE_SLAB);
+        registerMaterial(Material.POLISHED_DIORITE, Material.POLISHED_DIORITE_SLAB);
+        registerMaterial(Material.END_STONE_BRICKS, Material.END_STONE_BRICK_SLAB);
+        registerMaterial(Material.MOSSY_COBBLESTONE, Material.MOSSY_COBBLESTONE_SLAB);
+        registerMaterial(Material.PRISMARINE, Material.PRISMARINE_SLAB);
+        registerMaterial(Material.DARK_PRISMARINE, Material.DARK_PRISMARINE_SLAB);
+        registerMaterial(Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICK_SLAB);
+    }
 
     public Slabber(FoundationCore core)
     {
@@ -43,7 +91,7 @@ public class Slabber extends FoundationCommand implements Listener
 
     private void createRecipes()
     {
-        for(Material slab:slabs)
+        for(Material slab:TO_BLOCKS.keySet())
         {
             NamespacedKey ns = new NamespacedKey(core,"slab-combine-" + slab.toString());
             ShapelessRecipe r = new ShapelessRecipe(ns,new ItemStack(toBlock(slab),1));
@@ -145,228 +193,13 @@ public class Slabber extends FoundationCommand implements Listener
 
     private Material toSlab(Material m)
     {
-        switch (m)
-        {
-            case OAK_PLANKS:
-                return Material.OAK_SLAB;
-            case BIRCH_PLANKS:
-                return Material.BIRCH_SLAB;
-            case SPRUCE_PLANKS:
-                return Material.SPRUCE_SLAB;
-            case JUNGLE_PLANKS:
-                return Material.JUNGLE_SLAB;
-            case ACACIA_PLANKS:
-                return Material.ACACIA_SLAB;
-            case DARK_OAK_PLANKS:
-                return Material.DARK_OAK_SLAB;
-            case SANDSTONE:
-                return Material.SANDSTONE_SLAB;
-            case SMOOTH_SANDSTONE:
-                return Material.SMOOTH_SANDSTONE_SLAB;
-            case CUT_SANDSTONE:
-                return Material.CUT_SANDSTONE_SLAB;
-            case RED_SANDSTONE:
-                return Material.RED_SANDSTONE_SLAB;
-            case SMOOTH_RED_SANDSTONE:
-                return Material.SMOOTH_RED_SANDSTONE_SLAB;
-            case CUT_RED_SANDSTONE:
-                return Material.CUT_RED_SANDSTONE_SLAB;
-            case COBBLESTONE:
-                return Material.COBBLESTONE_SLAB;
-            case STONE:
-                return Material.STONE_SLAB;
-            case BRICK:
-                return Material.BRICK_SLAB;
-            case STONE_BRICKS:
-                return Material.STONE_BRICK_SLAB;
-            case MOSSY_STONE_BRICKS:
-                return Material.MOSSY_STONE_BRICK_SLAB;
-            case QUARTZ_BLOCK:
-                return Material.QUARTZ_SLAB;
-            case SMOOTH_QUARTZ:
-                return Material.SMOOTH_QUARTZ_SLAB;
-            case NETHER_BRICK:
-                return Material.NETHER_BRICK_SLAB;
-            case RED_NETHER_BRICKS:
-                return Material.RED_NETHER_BRICK_SLAB;
-            case PURPUR_BLOCK:
-                return Material.PURPUR_SLAB;
-            case SMOOTH_STONE:
-                return Material.SMOOTH_STONE_SLAB;
-            case GRANITE:
-                return Material.GRANITE_SLAB;
-            case POLISHED_GRANITE:
-                return Material.POLISHED_GRANITE_SLAB;
-            case ANDESITE:
-                return Material.ANDESITE_SLAB;
-            case POLISHED_ANDESITE:
-                return Material.POLISHED_ANDESITE_SLAB;
-            case DIORITE:
-                return Material.DIORITE_SLAB;
-            case POLISHED_DIORITE:
-                return Material.POLISHED_DIORITE_SLAB;
-            case END_STONE_BRICKS:
-                return Material.END_STONE_BRICK_SLAB;
-            case MOSSY_COBBLESTONE:
-                return Material.MOSSY_COBBLESTONE_SLAB;
-            case PRISMARINE:
-                return Material.PRISMARINE_SLAB;
-            case DARK_PRISMARINE:
-                return Material.DARK_PRISMARINE_SLAB;
-            case PRISMARINE_BRICKS:
-                return Material.PRISMARINE_BRICK_SLAB;
-            default:
-                return null;
-        }
+        return TO_SLABS.get(m);
     }
 
     private Material toBlock(Material m)
     {
-        switch (m)
-        {
-            case OAK_SLAB:
-                return Material.OAK_PLANKS;
-            case BIRCH_SLAB:
-                return Material.BIRCH_PLANKS;
-            case SPRUCE_SLAB:
-                return Material.SPRUCE_PLANKS;
-            case JUNGLE_SLAB:
-                return Material.JUNGLE_PLANKS;
-            case ACACIA_SLAB:
-                return Material.ACACIA_PLANKS;
-            case DARK_OAK_SLAB:
-                return Material.DARK_OAK_PLANKS;
-            case SANDSTONE_SLAB:
-                return Material.SANDSTONE;
-            case SMOOTH_SANDSTONE_SLAB:
-                return Material.SMOOTH_SANDSTONE;
-            case CUT_SANDSTONE_SLAB:
-                return Material.CUT_SANDSTONE;
-            case RED_SANDSTONE_SLAB:
-                return Material.RED_SANDSTONE;
-            case SMOOTH_RED_SANDSTONE_SLAB:
-                return Material.SMOOTH_RED_SANDSTONE;
-            case CUT_RED_SANDSTONE_SLAB:
-                return Material.CUT_RED_SANDSTONE;
-            case COBBLESTONE_SLAB:
-                return Material.COBBLESTONE;
-            case STONE_SLAB:
-                return Material.STONE;
-            case BRICK_SLAB:
-                return Material.BRICK;
-            case STONE_BRICK_SLAB:
-                return Material.STONE_BRICKS;
-            case MOSSY_STONE_BRICK_SLAB:
-                return Material.MOSSY_STONE_BRICKS;
-            case QUARTZ_SLAB:
-                return Material.QUARTZ_BLOCK;
-            case SMOOTH_QUARTZ_SLAB:
-                return Material.SMOOTH_QUARTZ;
-            case NETHER_BRICK_SLAB:
-                return Material.NETHER_BRICK;
-            case RED_NETHER_BRICK_SLAB:
-                return Material.RED_NETHER_BRICKS;
-            case PURPUR_SLAB:
-                return Material.PURPUR_BLOCK;
-            case SMOOTH_STONE_SLAB:
-                return Material.SMOOTH_STONE;
-            case GRANITE_SLAB:
-                return Material.GRANITE;
-            case POLISHED_GRANITE_SLAB:
-                return Material.POLISHED_GRANITE;
-            case ANDESITE_SLAB:
-                return Material.ANDESITE;
-            case POLISHED_ANDESITE_SLAB:
-                return Material.POLISHED_ANDESITE;
-            case DIORITE_SLAB:
-                return Material.DIORITE;
-            case POLISHED_DIORITE_SLAB:
-                return Material.POLISHED_DIORITE;
-            case END_STONE_BRICK_SLAB:
-                return Material.END_STONE_BRICKS;
-            case MOSSY_COBBLESTONE_SLAB:
-                return Material.MOSSY_COBBLESTONE;
-            case PRISMARINE_SLAB:
-                return Material.PRISMARINE;
-            case DARK_PRISMARINE_SLAB:
-                return Material.DARK_PRISMARINE;
-            case PRISMARINE_BRICK_SLAB:
-                return Material.PRISMARINE_BRICKS;
-            default:
-                return null;
-        }
+        return TO_BLOCKS.get(m);
     }
-
-    private final static Material[] slabs =
-            {
-                Material.OAK_SLAB,
-
-                Material.BIRCH_SLAB,
-
-                Material.SPRUCE_SLAB,
-
-                Material.JUNGLE_SLAB,
-
-                Material.ACACIA_SLAB,
-
-                Material.DARK_OAK_SLAB,
-
-                Material.SANDSTONE_SLAB,
-
-                Material.SMOOTH_SANDSTONE_SLAB,
-
-                Material.CUT_SANDSTONE_SLAB,
-
-                Material.RED_SANDSTONE_SLAB,
-
-                Material.SMOOTH_RED_SANDSTONE_SLAB,
-
-                Material.CUT_RED_SANDSTONE_SLAB,
-
-                Material.COBBLESTONE_SLAB,
-
-                Material.STONE_SLAB,
-
-                Material.BRICK_SLAB,
-
-                Material.STONE_BRICK_SLAB,
-
-                Material.MOSSY_STONE_BRICK_SLAB,
-
-                Material.QUARTZ_SLAB,
-
-                Material.SMOOTH_QUARTZ_SLAB,
-
-                Material.NETHER_BRICK_SLAB,
-
-                Material.RED_NETHER_BRICK_SLAB,
-
-                Material.PURPUR_SLAB,
-
-                Material.SMOOTH_STONE_SLAB,
-
-                Material.GRANITE_SLAB,
-
-                Material.POLISHED_GRANITE_SLAB,
-
-                Material.ANDESITE_SLAB,
-
-                Material.POLISHED_ANDESITE_SLAB,
-
-                Material.DIORITE_SLAB,
-
-                Material.POLISHED_DIORITE_SLAB,
-
-                Material.END_STONE_BRICK_SLAB,
-
-                Material.MOSSY_COBBLESTONE_SLAB,
-
-                Material.PRISMARINE_SLAB,
-
-                Material.DARK_PRISMARINE_SLAB,
-
-                Material.PRISMARINE_BRICK_SLAB
-            };
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
