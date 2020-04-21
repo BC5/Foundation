@@ -28,6 +28,8 @@ cmds:
   slab:
     enabled: "§6Block -> Slab conversion has been §aenabled"
     disabled: "§6Block -> Slab conversion has been §cdisabled"
+  toast:
+    notFabric: "§cYou aren't running the Foundation-Fabric mod"
   restart:
     bar: "Restarting Server"
   ride:

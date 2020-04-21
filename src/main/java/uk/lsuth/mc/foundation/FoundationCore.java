@@ -17,6 +17,7 @@ import uk.lsuth.mc.foundation.data.MongoManager;
 import uk.lsuth.mc.foundation.data.PlayerListener;
 import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
+import uk.lsuth.mc.foundation.fabric.FabricModule;
 import uk.lsuth.mc.foundation.language.LanguageManager;
 import uk.lsuth.mc.foundation.management.ManagementModule;
 import uk.lsuth.mc.foundation.pvp.PVPModule;
@@ -76,6 +77,7 @@ public class FoundationCore extends JavaPlugin
         modules.add(new BeaconUtils(this));
         modules.add(new ManagementModule(this));
         modules.add(new WorldModule(this));
+        modules.add(new FabricModule(this));
 
         dmgr.setTemplate(assembleTemplate());
 

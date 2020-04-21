@@ -26,6 +26,9 @@ commands:
   slab:
     description: Toggle the conversion of blocks to half-slabs
     usage: /slab
+  toast:
+    description: Send a toast to a Foundation-Fabric player
+    usage: /toast <message>
   msg:
     description: Message a friend secretly
     usage: /msg <player> <message>
