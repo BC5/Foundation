@@ -3,6 +3,7 @@ package uk.lsuth.mc.foundation.language;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -27,7 +28,7 @@ public class LanguageManager
         loadMCLang(core.getDataFolder().toString() + "/en_gb.json");
     }
 
-    public String getLocalisedName(ItemStack is, boolean useItemMeta)
+    public String getLocalisedName(ItemStack is,boolean useItemMeta)
     {
         if(useItemMeta && is.getItemMeta().hasDisplayName())
         {
@@ -35,29 +36,34 @@ public class LanguageManager
         }
         else
         {
-            if(lang == null)
+            return getLocalisedName(is.getType());
+        }
+    }
+
+    public String getLocalisedName(Material material)
+    {
+        if(lang == null)
+        {
+            return material.name();
+        }
+        else
+        {
+            String name;
+            if(material.isBlock())
             {
-                return is.getType().name();
+                name = lang.get("block.minecraft."+material.name().toLowerCase());
             }
             else
             {
-                String name;
-                if(is.getType().isBlock())
-                {
-                    name = lang.get("block.minecraft."+is.getType().name().toLowerCase());
-                }
-                else
-                {
-                    name = lang.get("item.minecraft."+is.getType().name().toLowerCase());
-                }
-                if(name == null || name.equals("") || name.equals(" "))
-                {
-                    return is.getType().name();
-                }
-                else
-                {
-                    return name;
-                }
+                name = lang.get("item.minecraft."+material.name().toLowerCase());
+            }
+            if(name == null || name.equals("") || name.equals(" "))
+            {
+                return material.name();
+            }
+            else
+            {
+                return name;
             }
         }
     }
