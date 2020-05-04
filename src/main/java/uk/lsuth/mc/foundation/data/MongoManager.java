@@ -14,8 +14,6 @@ import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
 
-//Filters i.e. eq(x,y)
-
 public class MongoManager implements DataManager
 {
 
