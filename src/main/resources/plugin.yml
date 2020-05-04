@@ -23,6 +23,9 @@ commands:
     usage: /bal
     aliases:
       - "balance"
+  query:
+    description: Looks for items in nearby containers
+    usage: /query <item>, /query <item> <radius>
   slab:
     description: Toggle the conversion of blocks to half-slabs
     usage: /slab

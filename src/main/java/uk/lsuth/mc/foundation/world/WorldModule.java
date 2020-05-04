@@ -25,6 +25,7 @@ public class WorldModule implements Module
     {
         ArrayList<FoundationCommand> cmds = new ArrayList<FoundationCommand>();
         cmds.add(slabber);
+        cmds.add(new ContainerQuery(core));
         return cmds;
     }
 
