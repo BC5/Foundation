@@ -249,6 +249,7 @@ public class Mail extends FoundationCommand
                     if(mailItems == null)
                     {
                         mailSender.openInventory(inv);
+                        return true;
                     }
 
                     YamlConfiguration itemcfg = new YamlConfiguration();
