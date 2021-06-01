@@ -3,28 +3,56 @@ package uk.lsuth.mc.foundation.data;
 import org.bson.Document;
 import org.bukkit.OfflinePlayer;
 
-public interface DataManager
+import java.util.ArrayList;
+import java.util.logging.Logger;
+
+public abstract class DataManager
 {
-    PlayerDataWrapper loadPlayer(OfflinePlayer player);
+    ArrayList<PlayerDataWrapper> cachedPlayers;
+    Logger log;
+    Document playerTemplate;
 
-    void unloadPlayer(OfflinePlayer player);
+    public DataManager()
+    {
+        cachedPlayers = new ArrayList<PlayerDataWrapper>();
+        this.log = log;
+    }
 
-    void savePlayer(OfflinePlayer player);
+    public void setTemplate(Document playerTemplate)
+    {
+        this.playerTemplate = playerTemplate;
+    }
 
-    void stash();
 
-    void setTemplate(Document template);
+    abstract PlayerDataWrapper loadPlayer(OfflinePlayer player);
 
-    boolean playerExists(OfflinePlayer player);
+    public abstract void unloadPlayer(OfflinePlayer player);
 
-    PlayerDataWrapper fetchData(OfflinePlayer player);
+    public abstract void savePlayer(OfflinePlayer player);
 
-    /**
-     * Fetches a database
-     *
-     * @param playerName
-     * @return
-     */
-    PlayerDataWrapper fetchData(String playerName);
+    public PlayerDataWrapper fetchData(OfflinePlayer player)
+    {
+        for(PlayerDataWrapper d:cachedPlayers)
+        {
+            if(player.getUniqueId().equals(d.getUniqueId()))
+            {
+                return d;
+            }
+        }
+        return loadPlayer(player);
+    }
+
+    public abstract PlayerDataWrapper fetchData(String name);
+
+    public void stash()
+    {
+        log.finer("Stashing data");
+        for(PlayerDataWrapper p:cachedPlayers)
+        {
+            savePlayer(p.getPlayer());
+        }
+    }
+
+    public abstract boolean playerExists(OfflinePlayer player);
 
 }

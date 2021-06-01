@@ -1,21 +1,19 @@
 package uk.lsuth.mc.foundation.data;
 
-import org.bson.BSONObject;
-import org.bson.BasicBSONDecoder;
 import org.bson.Document;
 import org.bukkit.OfflinePlayer;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import uk.lsuth.mc.foundation.FoundationCore;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class JSONManager implements DataManager
+public class JSONManager extends DataManager
 {
     boolean storeAsBSON;
 
@@ -40,29 +38,28 @@ public class JSONManager implements DataManager
     public PlayerDataWrapper loadPlayer(OfflinePlayer player)
     {
         UUID uuid = player.getUniqueId();
-
+        Document pdoc = loadPlayerDocumentFromJson(uuid);
 
 
         return null;
     }
 
-    private PlayerDataWrapper loadPlayerFromBSON(UUID u)
+    private Document loadPlayerDocumentFromJson(UUID u)
     {
-        File playerFile = new File(playerFolder, u.toString()+".bson");
+        File playerFile = new File(playerFolder, u.toString()+".json");
         try
         {
-            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(playerFile));
-            BasicBSONDecoder decoder = new BasicBSONDecoder();
-
-            BSONObject obj = decoder.readObject(inputStream);
+            String jsonString = new String(Files.readAllBytes(playerFile.toPath()),StandardCharsets.UTF_8);
+            Document pdoc = Document.parse(jsonString);
+            return pdoc;
         }
         catch (IOException e)
         {
             //This *shouldn't* happen. Validation has already been done.
             log.severe("File " + playerFile + " does not exist.");
             log.severe(e.getMessage());
+            return null;
         }
-        return null;
     }
 
     @Override

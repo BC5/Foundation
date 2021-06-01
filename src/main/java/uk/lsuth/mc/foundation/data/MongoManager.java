@@ -8,37 +8,24 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class MongoManager implements DataManager
+public class MongoManager extends DataManager
 {
 
     String dbAddress;
     MongoClient mongo;
     MongoDatabase db;
-
-    ArrayList<PlayerDataWrapper> cachedPlayers;
     MongoCollection<Document> playerCollection;
-
-    Logger log;
-    Document playerTemplate;
 
     public MongoManager(String address, Logger log)
     {
         //Logger.getLogger("org.mongodb.driver").setLevel(Level.OFF);
-        cachedPlayers = new ArrayList<PlayerDataWrapper>();
         this.dbAddress = address;
-        this.log = log;
         connect();
-    }
-
-    public void setTemplate(Document playerTemplate)
-    {
-        this.playerTemplate = playerTemplate;
     }
 
     private void connect()
@@ -49,23 +36,11 @@ public class MongoManager implements DataManager
         playerCollection = db.getCollection("players");
     }
 
+
     @Override
-    public PlayerDataWrapper fetchData(String name)
+    public boolean playerExists(OfflinePlayer player)
     {
-        Document playerdoc = playerCollection.find(eq("name",name)).first();
-        if(playerdoc == null)
-        {
-            log.warning("Player " + name + " has no database document");
-            return null;
-        }
-        else
-        {
-            UUID playerUUID = UUID.fromString((String) playerdoc.get("_id"));
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-            PlayerDataWrapper dataWrapper = new PlayerDataWrapper(offlinePlayer,this,playerdoc,playerUUID);
-            cachedPlayers.add(dataWrapper);
-            return dataWrapper;
-        }
+        return playerCollection.countDocuments(eq("_id", player.getUniqueId().toString())) != 0;
     }
 
     @Override
@@ -103,6 +78,25 @@ public class MongoManager implements DataManager
     }
 
     @Override
+    public PlayerDataWrapper fetchData(String name)
+    {
+        Document playerdoc = playerCollection.find(eq("name",name)).first();
+        if(playerdoc == null)
+        {
+            log.warning("Player " + name + " has no database document");
+            return null;
+        }
+        else
+        {
+            UUID playerUUID = UUID.fromString((String) playerdoc.get("_id"));
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+            PlayerDataWrapper dataWrapper = new PlayerDataWrapper(offlinePlayer,this,playerdoc,playerUUID);
+            cachedPlayers.add(dataWrapper);
+            return dataWrapper;
+        }
+    }
+
+    @Override
     public void unloadPlayer(OfflinePlayer player)
     {
         String uuid = player.getUniqueId().toString();
@@ -113,28 +107,8 @@ public class MongoManager implements DataManager
         cachedPlayers.remove(dw);
     }
 
-    @Override
-    public PlayerDataWrapper fetchData(OfflinePlayer player)
-    {
-        for(PlayerDataWrapper d:cachedPlayers)
-        {
-            if(player.getUniqueId().equals(d.getUniqueId()))
-            {
-                return d;
-            }
-        }
-        return loadPlayer(player);
-    }
 
-    @Override
-    public void stash()
-    {
-        log.finer("Stashing data");
-        for(PlayerDataWrapper p:cachedPlayers)
-        {
-            savePlayer(p);
-        }
-    }
+
 
     @Override
     public void savePlayer(OfflinePlayer player)
@@ -144,16 +118,4 @@ public class MongoManager implements DataManager
         playerCollection.replaceOne(eq("_id",uuid),playerdoc);
     }
 
-    public void savePlayer(PlayerDataWrapper player)
-    {
-        String uuid = player.getUniqueId().toString();
-        Document playerdoc = player.getPlayerDocument();
-        playerCollection.replaceOne(eq("_id",uuid),playerdoc);
-    }
-
-    @Override
-    public boolean playerExists(OfflinePlayer player)
-    {
-        return playerCollection.countDocuments(eq("_id", player.getUniqueId().toString())) != 0;
-    }
 }
