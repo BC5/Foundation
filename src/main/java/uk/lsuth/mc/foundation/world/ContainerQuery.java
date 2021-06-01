@@ -6,6 +6,7 @@ import org.bukkit.block.Container;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,6 +36,12 @@ public class ContainerQuery extends FoundationCommand
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        if(!(sender.hasPermission("foundation.world.query")))
+        {
+            sender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
         int radius = 5;
 
         if(args.length == 2)
@@ -49,7 +56,7 @@ public class ContainerQuery extends FoundationCommand
             }
         }
 
-        Material queryFor = Material.getMaterial(args[0]);
+        Material queryFor = Material.matchMaterial(args[0]);
 
         if(queryFor == null)
         {
@@ -59,9 +66,19 @@ public class ContainerQuery extends FoundationCommand
 
         if(sender instanceof Player)
         {
-            long startTime = System.currentTimeMillis();
 
             Player player = (Player) sender;
+
+            if(radius > 10)
+            {
+                new SliceQueryTask(player,radius,queryFor).runTaskTimer(core,0,1);
+                return true;
+            }
+
+
+            long startTime = System.currentTimeMillis();
+
+
             World w = player.getWorld();
 
             Block playerBlock = w.getBlockAt(player.getLocation());
@@ -82,7 +99,25 @@ public class ContainerQuery extends FoundationCommand
 
                             if(c.getInventory().contains(queryFor))
                             {
-                                matches.add(c.getInventory());
+                                if(c.getInventory() instanceof DoubleChestInventory)
+                                {
+                                    DoubleChestInventory dci = (DoubleChestInventory) c.getInventory();
+                                    if(c.getBlock().getLocation().equals(dci.getLeftSide().getLocation()))
+                                    {
+                                        matches.add(dci.getLeftSide());
+                                    }
+                                    else
+                                    {
+                                        matches.add(dci.getRightSide());
+                                    }
+
+                                }
+                                else
+                                {
+                                    matches.add(c.getInventory());
+                                }
+
+
                                 //Highlight container
                                 new HighlightBlockTask(c,6).runTaskTimer(core,0,10);
                             }
@@ -156,46 +191,22 @@ public class ContainerQuery extends FoundationCommand
 
     private static void drawSquare(World w,double x, double y, double z, int intermediate)
     {
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
+        for(double i = 0; i <= 1; i += 1.0 / (intermediate+2))
         {
             w.spawnParticle(Particle.REDSTONE,x+i,y,z,1,data);
-        }
-
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
-        {
             w.spawnParticle(Particle.REDSTONE,x+i,y,z+1,1,data);
-        }
-
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
-        {
             w.spawnParticle(Particle.REDSTONE,x,y,z+i,1,data);
-        }
-
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
-        {
             w.spawnParticle(Particle.REDSTONE,x+1,y,z+i,1,data);
         }
     }
 
     private static void drawPillars(World w,double x, double y, double z, int intermediate)
     {
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
+        for(double i = 0; i <= 1; i += 1.0 / (intermediate+2))
         {
             w.spawnParticle(Particle.REDSTONE,x,y+i,z,1,data);
-        }
-
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
-        {
             w.spawnParticle(Particle.REDSTONE,x,y+i,z+1,1,data);
-        }
-
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
-        {
             w.spawnParticle(Particle.REDSTONE,x+1,y+i,z,1,data);
-        }
-
-        for(double i = 0; i <= 1; i = i+((intermediate+2)/1))
-        {
             w.spawnParticle(Particle.REDSTONE,x+1,y+i,z+1,1,data);
         }
     }
@@ -223,6 +234,118 @@ public class ContainerQuery extends FoundationCommand
             else
             {
                 runs--;
+            }
+        }
+    }
+
+    private class SliceQueryTask extends BukkitRunnable
+    {
+
+        Player player;
+        int radius;
+        Material queryFor;
+
+        int y;
+        Block playerBlock;
+
+        ArrayList<Inventory> matches;
+
+        public SliceQueryTask(Player p, int radius, Material query)
+        {
+            this.player = p;
+            this.radius = radius;
+            this.queryFor = query;
+
+            matches = new ArrayList<Inventory>();
+
+            y = -radius;
+
+            playerBlock = player.getWorld().getBlockAt(player.getLocation());
+        }
+
+        @Override
+        public void run()
+        {
+            //Get all containers with item
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int z = -radius; z <= radius; z++)
+                {
+
+                    Block b = playerBlock.getRelative(x, y, z);
+                    if (b.getState() instanceof Container)
+                    {
+                        Container c = (Container) b.getState();
+
+                        if (c.getInventory().contains(queryFor))
+                        {
+                            if (c.getInventory() instanceof DoubleChestInventory)
+                            {
+                                DoubleChestInventory dci = (DoubleChestInventory) c.getInventory();
+                                if (c.getBlock().getLocation().equals(dci.getLeftSide().getLocation()))
+                                {
+                                    matches.add(dci.getLeftSide());
+                                }
+                                else
+                                {
+                                    matches.add(dci.getRightSide());
+                                }
+
+                            }
+                            else
+                            {
+                                matches.add(c.getInventory());
+                            }
+
+
+                            //Highlight container
+                            new HighlightBlockTask(c, 6).runTaskTimer(core, 0, 10);
+                        }
+                    }
+                }
+            }
+
+            y++;
+            if(y >= radius+1)
+            {
+                finalRun();
+                this.cancel();
+            }
+        }
+
+        private void finalRun()
+        {
+            int count = 0;
+
+
+            for(Inventory inv:matches)
+            {
+                //Count the amount of items in the container
+                for(ItemStack i : inv.getContents())
+                {
+                    if(i != null)
+                    {
+                        if(i.getType() == queryFor)
+                        {
+                            count = count + i.getAmount();
+                        }
+                    }
+                }
+            }
+
+            if(matches.size() == 0)
+            {
+                player.sendMessage(strings.get("none").replace("{x}",lmgr.getLocalisedName(queryFor)).replace("{y}",Integer.toString(radius)));
+            }
+            else
+            {
+                String msg = strings.get("response-sliced");
+
+                msg = msg.replace("{radius}",Integer.toString(radius));
+                msg = msg.replace("{item}",lmgr.getLocalisedName(queryFor));
+                msg = msg.replace("{amount}",Integer.toString(count));
+
+                player.sendMessage(msg);
             }
         }
     }

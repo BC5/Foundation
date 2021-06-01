@@ -16,7 +16,8 @@ cmds:
   query:
     unknown: "§6Unknown item"
     none: "§6Couldn't find any §f{x} §6within §f{y}§am"
-    response: "§6Found §a{amount} §f{item} §6within §f{radius}§am §6this search took §b{milliseconds}§dms"
+    response: "§6Found §a{amount} §f{item} §6within §b{radius}m §6this search took §b{milliseconds}ms"
+    response-sliced: "§6Found §a{amount} §f{item} §6within §b{radius}m"
   marker:
     updated: "§6Marker set!"
     removed: "§6Marker removed"
