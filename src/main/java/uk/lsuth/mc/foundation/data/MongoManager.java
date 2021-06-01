@@ -51,14 +51,12 @@ public class MongoManager extends DataManager
 
         if(playerdoc == null)
         {
-            log.info("Creating new player profile for "  + player.getName());
-            playerdoc = new Document(playerTemplate);
-            playerdoc.append("_id",player.getUniqueId().toString());
-            playerdoc.append("name",player.getName());
-            System.out.println(playerdoc.toJson());
+            playerdoc = createPlayerTemplate(player);
             playerCollection.insertOne(playerdoc);
 
-            return new PlayerDataWrapper(player,this,playerdoc,player.getUniqueId());
+            PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
+            cachedPlayers.add(wrapper);
+            return wrapper;
         }
         else
         {
@@ -96,18 +94,13 @@ public class MongoManager extends DataManager
         }
     }
 
+
     @Override
-    public void unloadPlayer(OfflinePlayer player)
+    public void savePlayer(PlayerDataWrapper player)
     {
         String uuid = player.getUniqueId().toString();
-        PlayerDataWrapper dw = fetchData(player);
-        Document playerdoc = dw.getPlayerDocument();
-        playerCollection.replaceOne(eq("_id",uuid),playerdoc);
-
-        cachedPlayers.remove(dw);
+        playerCollection.replaceOne(eq("_id",uuid),player.getPlayerDocument());
     }
-
-
 
 
     @Override

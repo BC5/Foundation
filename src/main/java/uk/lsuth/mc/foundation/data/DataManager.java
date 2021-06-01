@@ -23,10 +23,23 @@ public abstract class DataManager
         this.playerTemplate = playerTemplate;
     }
 
+    public Document createPlayerTemplate(OfflinePlayer player)
+    {
+        log.info("Creating new player profile for "  + player.getName());
+        Document playerdoc = new Document(playerTemplate);
+        playerdoc.append("_id",player.getUniqueId().toString());
+        playerdoc.append("name",player.getName());
+        return playerdoc;
+    }
 
     abstract PlayerDataWrapper loadPlayer(OfflinePlayer player);
 
-    public abstract void unloadPlayer(OfflinePlayer player);
+    public void unloadPlayer(OfflinePlayer player)
+    {
+        PlayerDataWrapper pdw = fetchData(player);
+        savePlayer(pdw);
+        cachedPlayers.remove(pdw);
+    }
 
     public abstract void savePlayer(OfflinePlayer player);
 
@@ -54,5 +67,7 @@ public abstract class DataManager
     }
 
     public abstract boolean playerExists(OfflinePlayer player);
+
+    public abstract void savePlayer(PlayerDataWrapper pdw);
 
 }
