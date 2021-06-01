@@ -16,3 +16,11 @@ biomeChange:
   onlyOverworld: true
   bonemeal: true
   naturalGrowth: true
+hardcore:
+  enabled: true
+  hearts: true
+  permban: false
+  banlength: 120
+  lives: 3
+  livestheft: false
+  regentime: 1800
