@@ -19,24 +19,38 @@ public class JSONManager extends DataManager
 
     public JSONManager(FoundationCore core)
     {
+        super(core.log);
+
         dataFolder = new File(core.getDataFolder(), "data");
         playerFolder = new File(dataFolder,"player");
+
+        if(!playerFolder.exists())
+        {
+            playerFolder.mkdir();
+        }
     }
 
     @Override
     public PlayerDataWrapper loadPlayer(OfflinePlayer player)
     {
         UUID uuid = player.getUniqueId();
-        Document playerdoc = loadPlayerDocumentFromJson(uuid);
+        Document playerdoc;
 
-        if(playerdoc == null)
+        if(!playerExists(player))
         {
             playerdoc = createPlayerTemplate(player);
             writeJSONtoFile(playerdoc,getPlayerFile(uuid));
-
             PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
+        }
+
+        playerdoc = loadPlayerDocumentFromJson(uuid);
+
+        if(playerdoc == null)
+        {
+            log.severe("Unable to read file. Check permissions.");
+            return null;
         }
         else
         {
@@ -94,7 +108,7 @@ public class JSONManager extends DataManager
         catch (IOException e)
         {
             //This *shouldn't* happen. Validation has already been done.
-            log.severe("File " + playerFile + " does not exist.");
+            log.severe("File " + playerFile.getName() + " can't be read.");
             log.severe(e.getMessage());
             return null;
         }

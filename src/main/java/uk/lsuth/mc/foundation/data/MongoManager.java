@@ -23,6 +23,7 @@ public class MongoManager extends DataManager
 
     public MongoManager(String address, Logger log)
     {
+        super(log);
         //Logger.getLogger("org.mongodb.driver").setLevel(Level.OFF);
         this.dbAddress = address;
         connect();

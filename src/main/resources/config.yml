@@ -1,4 +1,7 @@
 lang: "en-gb"
+data:
+  flatfile: true
+  mongourl: "mongodb://localhost:27017/"
 pvp:
   beheading: true
   keepItemsOnMurder: true

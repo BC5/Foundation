@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import uk.lsuth.mc.foundation.beacon.BeaconUtils;
 import uk.lsuth.mc.foundation.chat.ChatModule;
 import uk.lsuth.mc.foundation.data.DataManager;
+import uk.lsuth.mc.foundation.data.JSONManager;
 import uk.lsuth.mc.foundation.data.MongoManager;
 import uk.lsuth.mc.foundation.data.PlayerListener;
 import uk.lsuth.mc.foundation.economy.EconomyModule;
@@ -56,8 +57,16 @@ public class FoundationCore extends JavaPlugin
 
         noPermission = lmgr.getStrings("perm").get("noPermission");
 
-        log.info("Connecting Database");
-        dmgr = new MongoManager("mongodb://localhost:27017/",log);
+        if(cfg.getBoolean("data.flatfile"))
+        {
+            log.info("Using JSON Data Storage");
+            dmgr = new JSONManager(this);
+        }
+        else
+        {
+            log.info("Using MongoDB");
+            dmgr = new MongoManager(cfg.getString("data.mongourl"),log);
+        }
 
         log.info("Loading modules");
         modules = new ArrayList<Module>();

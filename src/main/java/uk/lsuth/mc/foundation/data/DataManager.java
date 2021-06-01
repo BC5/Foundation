@@ -12,7 +12,7 @@ public abstract class DataManager
     Logger log;
     Document playerTemplate;
 
-    public DataManager()
+    public DataManager(Logger log)
     {
         cachedPlayers = new ArrayList<PlayerDataWrapper>();
         this.log = log;
