@@ -1,6 +1,7 @@
 package uk.lsuth.mc.foundation.data;
 
 import org.bson.Document;
+import org.bson.json.JsonWriterSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -69,6 +70,7 @@ public class JSONManager extends DataManager
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void writeJSONtoFile(Document doc, File f)
     {
         try
@@ -79,7 +81,8 @@ public class JSONManager extends DataManager
             }
 
             FileWriter w = new FileWriter(f);
-            w.write(doc.toJson());
+
+            w.write(doc.toJson(new JsonWriterSettings(true)));
             w.close();
 
         }
