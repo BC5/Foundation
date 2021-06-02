@@ -92,6 +92,11 @@ cmds:
     spectatorRemoved: "§cYou've been automatically switched to §aSurvival Mode"
   announce:
     format: "§d§lAnnouncement §a>>§r {message}"
+  lives:
+    playerlivesplural: "§6You have §e{x} §6lives"
+    playerlife: "§6You have §c1 §6life"
+    otherlivesplural: "§d{x} §6has §e{y} §6lives"
+    otherlife: "§d{x} §6has §c1 §6life"
 
 perm:
   noPermission: §4You aren't allowed to do that.

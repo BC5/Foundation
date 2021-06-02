@@ -14,16 +14,19 @@ public class GameruleModule implements Module
 {
     public Hardcore hc;
     private ArrayList<Listener> listeners;
+    private ArrayList<FoundationCommand> cmds;
 
     public GameruleModule(FoundationCore plugin)
     {
         listeners = new ArrayList<Listener>();
+        cmds = new ArrayList<FoundationCommand>();
         Configuration cfg = plugin.getConfiguration();
 
         if(cfg.getBoolean("hardcore.enabled"))
         {
             hc = new Hardcore(plugin);
             listeners.add(hc);
+            cmds.add(new HardcoreLivesCommand(plugin));
         }
 
     }
@@ -31,7 +34,7 @@ public class GameruleModule implements Module
     @Override
     public List<FoundationCommand> getCommands()
     {
-        return new ArrayList<FoundationCommand>();
+        return cmds;
     }
 
     @Override
