@@ -98,3 +98,6 @@ commands:
   ride:
     description: Ride anything
     usage: /ride
+  lives:
+    description: Check hardcore lives
+    usage: /lives, /lives <player>
