@@ -1,5 +1,5 @@
 name: Foundation
-version: Alpha 0
+version: Alpha 1
 main: uk.lsuth.mc.foundation.FoundationCore
 
 api-version: 1.15
