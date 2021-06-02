@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.lsuth.mc</groupId>
   <artifactId>Foundation</artifactId>
-  <version>Alpha 0</version>
+  <version>Alpha 1</version>
   <build>
     <plugins>
       <plugin>

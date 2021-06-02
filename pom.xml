@@ -6,7 +6,7 @@
 
     <groupId>uk.lsuth.mc</groupId>
     <artifactId>Foundation</artifactId>
-    <version>Alpha 0</version>
+    <version>Alpha 1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
