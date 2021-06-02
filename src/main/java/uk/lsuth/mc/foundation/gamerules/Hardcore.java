@@ -46,9 +46,11 @@ public class Hardcore implements Listener
 
     DataManager dmgr;
     Logger log;
+    FoundationCore core;
 
     public Hardcore(FoundationCore core)
     {
+        this.core = core;
         dmgr = core.getDmgr();
         log = core.log;
         loadConfig(core.getConfiguration());
@@ -115,7 +117,6 @@ public class Hardcore implements Listener
             if(permban)
             {
                 Bukkit.getBanList(BanList.Type.NAME).addBan(pdw.getPlayer().getName(),banmessage,null,null);
-                e.getEntity().kickPlayer(banmessage);
             }
             else
             {
@@ -123,8 +124,11 @@ public class Hardcore implements Listener
                 pdoc.put("hardcore",hardcore);
                 Date date = new Date(System.currentTimeMillis()+timeout*1000);
                 Bukkit.getBanList(BanList.Type.NAME).addBan(pdw.getPlayer().getName(),banmessage,date,null);
-                e.getEntity().kickPlayer(banmessage);
             }
+
+            //Prevents IllegalStateException: Removing entity while ticking
+            Bukkit.getScheduler().runTask(core, () -> e.getEntity().kickPlayer(banmessage));
+
         }
 
 
