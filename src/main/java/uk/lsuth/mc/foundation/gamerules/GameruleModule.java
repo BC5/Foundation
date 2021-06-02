@@ -13,15 +13,19 @@ import java.util.List;
 public class GameruleModule implements Module
 {
     public Hardcore hc;
+    private ArrayList<Listener> listeners;
 
     public GameruleModule(FoundationCore plugin)
     {
+        listeners = new ArrayList<Listener>();
         Configuration cfg = plugin.getConfiguration();
 
         if(cfg.getBoolean("hardcore.enabled"))
         {
             hc = new Hardcore(plugin);
+            listeners.add(hc);
         }
+
     }
 
     @Override
@@ -33,7 +37,7 @@ public class GameruleModule implements Module
     @Override
     public List<Listener> getListeners()
     {
-        return new ArrayList<Listener>();
+        return listeners;
     }
 
     @Override

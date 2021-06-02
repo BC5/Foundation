@@ -17,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
-import org.json.simple.JSONObject;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
@@ -46,10 +45,12 @@ public class Hardcore implements Listener
     int regen = 30 * 60;
 
     DataManager dmgr;
+    Logger log;
 
     public Hardcore(FoundationCore core)
     {
         dmgr = core.getDmgr();
+        log = core.log;
         loadConfig(core.getConfiguration());
         if(doHearts) ProtocolLibrary.getProtocolManager().addPacketListener(new HardcoreHearts(core,core.log));
     }
@@ -73,16 +74,20 @@ public class Hardcore implements Listener
         Document pdoc = pdw.getPlayerDocument();
         if(pdoc.get("hardcore") == null)
         {
-            JSONObject hardcore = new JSONObject();
+            log.info("Assigning lives for first time to " + e.getEntity().getName());
+            Document hardcore = new Document();
             hardcore.put("lives",startingLives);
-
             pdoc.put("hardcore",hardcore);
         }
-        JSONObject hardcore = (JSONObject) pdoc.get("hardcore");
+        Document hardcore = (Document) pdoc.get("hardcore");
 
         //Subtract life lost
         int curLives = (int) hardcore.get("lives");
-        hardcore.put("lives",curLives--);
+        curLives--;
+        hardcore.put("lives",curLives);
+        pdoc.put("hardcore",hardcore);
+
+        log.info(e.getEntity().getName() + " now has " + curLives + " lives");
 
         if(livestheft)
         {
@@ -93,12 +98,12 @@ public class Hardcore implements Listener
                 Document pdoc2 = pdw2.getPlayerDocument();
                 if(pdoc2.get("hardcore") == null)
                 {
-                    JSONObject hardcore2 = new JSONObject();
+                    Document hardcore2 = new Document();
                     hardcore2.put("lives",startingLives);
 
                     pdoc2.put("hardcore",hardcore2);
                 }
-                JSONObject hardcore2 = (JSONObject) pdoc2.get("hardcore");
+                Document hardcore2 = (Document) pdoc2.get("hardcore");
                 int x = (int) hardcore2.get("lives");
                 hardcore2.put("lives",x+1);
                 pdoc2.put("hardcore",hardcore2);
@@ -115,6 +120,7 @@ public class Hardcore implements Listener
             else
             {
                 hardcore.put("lives",1);
+                pdoc.put("hardcore",hardcore);
                 Date date = new Date(System.currentTimeMillis()+timeout*1000);
                 Bukkit.getBanList(BanList.Type.NAME).addBan(pdw.getPlayer().getName(),banmessage,date,null);
                 e.getEntity().kickPlayer(banmessage);
@@ -133,11 +139,13 @@ public class Hardcore implements Listener
         }
 
         @Override
+        public void onPacketReceiving(PacketEvent e){return;};
+
+        @Override
         public void onPacketSending(PacketEvent event)
         {
-            super.onPacketSending(event);
             PacketContainer p = event.getPacket();
-            p.getBooleans().write(0, true);
+            p.getBooleans().write(0,true);
         }
     }
 
