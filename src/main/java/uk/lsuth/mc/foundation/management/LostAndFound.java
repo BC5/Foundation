@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByBlockEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
@@ -89,6 +90,7 @@ public class LostAndFound implements Listener
         }
     }
 
+    @EventHandler
     public void onItemDespawn(ItemDespawnEvent e)
     {
         Material m = e.getEntity().getItemStack().getType();
@@ -101,6 +103,7 @@ public class LostAndFound implements Listener
 
     }
 
+    @EventHandler
     public void onItemBurn(EntityCombustByBlockEvent e)
     {
         if(e.getEntity() instanceof Item)

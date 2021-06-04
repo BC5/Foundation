@@ -1,6 +1,9 @@
 package uk.lsuth.mc.foundation.world;
 
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.TreeType;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -8,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
 import uk.lsuth.mc.foundation.FoundationCore;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class BiomeChange implements Listener
@@ -50,23 +52,11 @@ public class BiomeChange implements Listener
                 Biome newBiome = treeBiome(e.getSpecies());
                 Biome existingBiome = w.getBiome(loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
 
-                if(newBiome.equals(existingBiome))
-                {
-                    return;
-                }
-                else
+                if(!newBiome.equals(existingBiome))
                 {
                     initiateBiomeChange(loc,newBiome);
                 }
             }
-            else
-            {
-                return;
-            }
-        }
-        else
-        {
-            return;
         }
     }
 
@@ -75,8 +65,6 @@ public class BiomeChange implements Listener
         World w = loc.getWorld();
         int x = loc.getBlockX();
         int z = loc.getBlockZ();
-
-        ArrayList<Chunk> updateList = new ArrayList<Chunk>();
 
         for(int column = -3; column <= 3; column++)
         {

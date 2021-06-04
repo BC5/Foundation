@@ -25,7 +25,7 @@ public class LanguageManager
     {
         this.cfg = cfg;
         this.core = core;
-        loadMCLang(core.getDataFolder().toString() + "/en_gb.json");
+        loadMCLang(core.getDataFolder() + "/en_gb.json");
     }
 
     public String getLocalisedName(ItemStack is,boolean useItemMeta)
