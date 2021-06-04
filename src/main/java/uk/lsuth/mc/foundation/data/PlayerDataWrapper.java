@@ -7,21 +7,16 @@ import java.util.UUID;
 
 public class PlayerDataWrapper
 {
-    private OfflinePlayer player;
-    private Document playerDocument;
+    private final OfflinePlayer player;
+    private final Document playerDocument;
 
-    private UUID uuid;
+    private final UUID uuid;
 
-    public PlayerDataWrapper(OfflinePlayer player, DataManager dataManager, Document playerDocument, UUID uuid)
+    public PlayerDataWrapper(OfflinePlayer player, Document playerDocument, UUID uuid)
     {
         this.player = player;
         this.playerDocument = playerDocument;
         this.uuid = uuid;
-    }
-
-    public void save()
-    {
-        //TODO:
     }
 
     public UUID getUniqueId()

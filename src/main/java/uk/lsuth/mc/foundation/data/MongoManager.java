@@ -57,7 +57,7 @@ public class MongoManager extends DataManager
             playerdoc = createPlayerTemplate(player);
             playerCollection.insertOne(playerdoc);
 
-            PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
+            PlayerDataWrapper wrapper = new PlayerDataWrapper(player, playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
         }
@@ -72,7 +72,7 @@ public class MongoManager extends DataManager
             }
 
             log.info("Player " + player.getName() + " loaded from database");
-            PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
+            PlayerDataWrapper wrapper = new PlayerDataWrapper(player, playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
         }
@@ -110,7 +110,7 @@ public class MongoManager extends DataManager
         {
             UUID playerUUID = UUID.fromString((String) playerdoc.get("_id"));
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-            PlayerDataWrapper dataWrapper = new PlayerDataWrapper(offlinePlayer,this,playerdoc,playerUUID);
+            PlayerDataWrapper dataWrapper = new PlayerDataWrapper(offlinePlayer, playerdoc,playerUUID);
             cachedPlayers.add(dataWrapper);
             return dataWrapper;
         }

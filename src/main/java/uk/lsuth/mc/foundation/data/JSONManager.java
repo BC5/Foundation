@@ -41,7 +41,7 @@ public class JSONManager extends DataManager
         {
             playerdoc = createPlayerTemplate(player);
             writeJSONtoFile(playerdoc,getPlayerFile(uuid));
-            PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
+            PlayerDataWrapper wrapper = new PlayerDataWrapper(player, playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
         }
@@ -64,7 +64,7 @@ public class JSONManager extends DataManager
             }
 
             log.info("Player " + player.getName() + " loaded from " + getPlayerFile(uuid).getName());
-            PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
+            PlayerDataWrapper wrapper = new PlayerDataWrapper(player, playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
         }
