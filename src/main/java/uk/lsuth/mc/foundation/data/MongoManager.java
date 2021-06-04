@@ -82,7 +82,16 @@ public class MongoManager extends DataManager
     @Override
     public Document fetchMiscDoc(String name)
     {
-        return playerCollection.find(eq("name",name)).first();
+        if(miscDocs.containsKey(name))
+        {
+            return miscDocs.get(name);
+        }
+        else
+        {
+            Document d = playerCollection.find(eq("name",name)).first();
+            miscDocs.put(name,d);
+            return d;
+        }
     }
 
     @Override

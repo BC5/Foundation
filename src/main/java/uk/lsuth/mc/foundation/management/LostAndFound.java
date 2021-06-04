@@ -43,7 +43,8 @@ public class LostAndFound implements Listener
         {
             doc = new Document();
             doc.put("name",docname);
-            dmgr.saveMiscDoc(docname,doc);
+            doc.put("items",new ArrayList<String>());
+            dmgr.registerMiscDoc(docname,doc);
         }
 
         importFromDoc();
@@ -97,6 +98,7 @@ public class LostAndFound implements Listener
 
         if(!isBlacklisted(m))
         {
+            log.info("Saved " + e.getEntity().getItemStack().getI18NDisplayName() + " from despawn");
             itemStacks.add(e.getEntity().getItemStack());
             exportToDoc();
         }
@@ -112,6 +114,7 @@ public class LostAndFound implements Listener
             Material m = i.getItemStack().getType();
             if(!isBlacklisted(m))
             {
+                log.info("Saved " + i.getItemStack().getI18NDisplayName() + " from fire");
                 itemStacks.add(i.getItemStack());
                 exportToDoc();
                 i.remove();
@@ -138,6 +141,14 @@ public class LostAndFound implements Listener
             case DIRT:
             case WHITE_WOOL:
             case MUTTON:
+            case STICK:
+            case OAK_SAPLING:
+            case DARK_OAK_SAPLING:
+            case SPRUCE_SAPLING:
+            case BIRCH_SAPLING:
+            case JUNGLE_SAPLING:
+            case ACACIA_SAPLING:
+            case APPLE:
                 return true;
             default:
                 return false;

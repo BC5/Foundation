@@ -73,10 +73,19 @@ public class JSONManager extends DataManager
     @Override
     public Document fetchMiscDoc(String name)
     {
-        Document d = loadDocumentFromJson(getMiscDocFile(name));
-        log.info("Loaded " + name + " data");
-        return d;
+        if(miscDocs.containsKey(name))
+        {
+            return miscDocs.get(name);
+        }
+        else
+        {
+            log.info("Loaded " + name + " data");
+            Document d = loadDocumentFromJson(getMiscDocFile(name));
+            miscDocs.put(name,d);
+            return d;
+        }
     }
+
 
     @Override
     public void saveMiscDoc(String name, Document doc)

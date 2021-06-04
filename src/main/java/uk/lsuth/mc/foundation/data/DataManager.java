@@ -41,6 +41,12 @@ public abstract class DataManager
 
     public abstract Document fetchMiscDoc(String name);
 
+    public void registerMiscDoc(String name, Document doc)
+    {
+        miscDocs.put(name,doc);
+        saveMiscDoc(name,doc);
+    }
+
     public abstract void saveMiscDoc(String name, Document doc);
 
     public abstract boolean miscDocExists(String name);
@@ -70,7 +76,7 @@ public abstract class DataManager
 
     public void stash()
     {
-        log.finer("Stashing data");
+        log.info("Stashing data");
         for(PlayerDataWrapper p:cachedPlayers)
         {
             savePlayer(p.getPlayer());
