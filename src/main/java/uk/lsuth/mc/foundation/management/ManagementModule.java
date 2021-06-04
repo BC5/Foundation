@@ -40,6 +40,7 @@ public class ManagementModule implements Module
     {
         ArrayList<Listener> listeners = new ArrayList<Listener>();
         listeners.add(shadowKick.getListener());
+        listeners.add(new LostAndFound(core));
         listeners.add(freeze);
         return listeners;
     }
