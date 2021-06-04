@@ -4,6 +4,8 @@ import org.bson.Document;
 import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public abstract class DataManager
@@ -12,9 +14,12 @@ public abstract class DataManager
     Logger log;
     Document playerTemplate;
 
+    HashMap<String,Document> miscDocs;
+
     public DataManager(Logger log)
     {
         cachedPlayers = new ArrayList<PlayerDataWrapper>();
+        miscDocs = new HashMap<String,Document>();
         this.log = log;
     }
 
@@ -33,6 +38,12 @@ public abstract class DataManager
     }
 
     abstract PlayerDataWrapper loadPlayer(OfflinePlayer player);
+
+    public abstract Document fetchMiscDoc(String name);
+
+    public abstract void saveMiscDoc(String name, Document doc);
+
+    public abstract boolean miscDocExists(String name);
 
     public void unloadPlayer(OfflinePlayer player)
     {
@@ -64,6 +75,12 @@ public abstract class DataManager
         {
             savePlayer(p.getPlayer());
         }
+
+        for(Map.Entry<String,Document> d:miscDocs.entrySet())
+        {
+            saveMiscDoc(d.getKey(),d.getValue());
+        }
+
     }
 
     public abstract boolean playerExists(OfflinePlayer player);

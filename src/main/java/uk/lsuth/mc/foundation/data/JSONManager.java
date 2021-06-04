@@ -63,11 +63,31 @@ public class JSONManager extends DataManager
                 playerdoc.replace("name",player.getName());
             }
 
-            log.info("Player " + player.getName() + " loaded from database");
+            log.info("Player " + player.getName() + " loaded from " + getPlayerFile(uuid).getName());
             PlayerDataWrapper wrapper = new PlayerDataWrapper(player,this,playerdoc,uuid);
             cachedPlayers.add(wrapper);
             return wrapper;
         }
+    }
+
+    @Override
+    public Document fetchMiscDoc(String name)
+    {
+        Document d = loadDocumentFromJson(getMiscDocFile(name));
+        log.info("Loaded " + name + " data");
+        return d;
+    }
+
+    @Override
+    public void saveMiscDoc(String name, Document doc)
+    {
+        writeJSONtoFile(doc,getMiscDocFile(name));
+    }
+
+    @Override
+    public boolean miscDocExists(String name)
+    {
+        return getMiscDocFile(name).exists();
     }
 
     @SuppressWarnings("deprecation")
@@ -99,19 +119,29 @@ public class JSONManager extends DataManager
         return new File(playerFolder, u.toString()+".json");
     }
 
+    private File getMiscDocFile(String name)
+    {
+        return new File(dataFolder, name + ".json");
+    }
+
     private Document loadPlayerDocumentFromJson(UUID u)
     {
         File playerFile = getPlayerFile(u);
+        return loadDocumentFromJson(playerFile);
+    }
+
+    private Document loadDocumentFromJson(File file)
+    {
         try
         {
-            String jsonString = new String(Files.readAllBytes(playerFile.toPath()),StandardCharsets.UTF_8);
-            Document pdoc = Document.parse(jsonString);
-            return pdoc;
+            String jsonString = new String(Files.readAllBytes(file.toPath()),StandardCharsets.UTF_8);
+            Document doc = Document.parse(jsonString);
+            return doc;
         }
         catch (IOException e)
         {
             //This *shouldn't* happen. Validation has already been done.
-            log.severe("File " + playerFile.getName() + " can't be read.");
+            log.severe("File " + file.getName() + " can't be read.");
             log.severe(e.getMessage());
             return null;
         }

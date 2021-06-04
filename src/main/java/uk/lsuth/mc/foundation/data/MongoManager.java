@@ -20,6 +20,7 @@ public class MongoManager extends DataManager
     MongoClient mongo;
     MongoDatabase db;
     MongoCollection<Document> playerCollection;
+    MongoCollection<Document> miscdocCollection;
 
     public MongoManager(String address, Logger log)
     {
@@ -35,6 +36,7 @@ public class MongoManager extends DataManager
         db = mongo.getDatabase("foundation");
 
         playerCollection = db.getCollection("players");
+        miscdocCollection = db.getCollection("data");
     }
 
 
@@ -74,6 +76,25 @@ public class MongoManager extends DataManager
             cachedPlayers.add(wrapper);
             return wrapper;
         }
+    }
+
+    //TODO: Test MongoDB miscdoc implementation
+    @Override
+    public Document fetchMiscDoc(String name)
+    {
+        return playerCollection.find(eq("name",name)).first();
+    }
+
+    @Override
+    public void saveMiscDoc(String name, Document doc)
+    {
+        playerCollection.replaceOne(eq("name",name),doc);
+    }
+
+    @Override
+    public boolean miscDocExists(String name)
+    {
+        return playerCollection.countDocuments(eq("name",name)) > 0;
     }
 
     @Override
