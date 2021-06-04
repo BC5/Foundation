@@ -17,10 +17,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -48,6 +50,8 @@ public class Hardcore implements Listener
     Logger log;
     FoundationCore core;
 
+    static RegenTask tsk;
+
     public Hardcore(FoundationCore core)
     {
         this.core = core;
@@ -55,6 +59,20 @@ public class Hardcore implements Listener
         log = core.log;
         loadConfig(core.getConfiguration());
         if(doHearts) ProtocolLibrary.getProtocolManager().addPacketListener(new HardcoreHearts(core,core.log));
+        if(regen > 1)
+        {
+            long delay = regen*20;
+            long period = regen*20;
+
+            if(tsk != null)
+            {
+                tsk.cancel();
+                tsk = null;
+            }
+
+            tsk = new RegenTask();
+            tsk.runTaskTimer(core,delay,period);
+        }
     }
 
     private void loadConfig(Configuration cfg)
@@ -91,9 +109,9 @@ public class Hardcore implements Listener
 
         log.info(e.getEntity().getName() + " now has " + curLives + " lives");
 
+        LivingEntity killer = e.getEntity().getKiller();
         if(livestheft)
         {
-            LivingEntity killer = e.getEntity().getKiller();
             if(killer instanceof Player)
             {
                 PlayerDataWrapper pdw2 = dmgr.fetchData((OfflinePlayer) killer);
@@ -110,7 +128,16 @@ public class Hardcore implements Listener
                 hardcore2.put("lives",x+1);
                 pdoc2.put("hardcore",hardcore2);
             }
+
+
+
         }
+
+        if(!(killer instanceof Player))
+        {
+            e.getDrops().clear();
+        }
+
 
         if(curLives == 0)
         {
@@ -150,6 +177,37 @@ public class Hardcore implements Listener
         {
             PacketContainer p = event.getPacket();
             p.getBooleans().write(0,true);
+        }
+    }
+
+    class RegenTask extends BukkitRunnable
+    {
+
+        @Override
+        public void run()
+        {
+            Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+
+            for(Player p : players)
+            {
+                int lives = HardcoreLivesCommand.getLives(p,dmgr);
+
+                if(lives == startingLives || lives == 0)
+                {
+
+                }
+                else if(lives < startingLives)
+                {
+                    PlayerDataWrapper pdw = dmgr.fetchData(p);
+                    Document d = pdw.getPlayerDocument();
+                    Document hc = (Document) d.get("hardcore");
+                    hc.put("lives",lives+1);
+                    d.put("hardcore",hc);
+                    p.sendActionBar("§aYou now have " + lives+1 + " lives");
+                    log.fine("Given a life to " + p.getName());
+                }
+            }
+
         }
     }
 
