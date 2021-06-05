@@ -14,11 +14,13 @@ public class ManagementModule implements Module
     ShadowKick shadowKick;
     Freeze freeze;
     FoundationCore core;
+    LostAndFound lf;
 
     public ManagementModule(FoundationCore core)
     {
         shadowKick = new ShadowKick(core);
         freeze = new Freeze(core);
+        lf = new LostAndFound(core);
         this.core = core;
     }
 
@@ -32,6 +34,7 @@ public class ManagementModule implements Module
         cmds.add(new Announce(core.getLmgr().getCommandStrings("announce")));
         cmds.add(new Restart(core));
         cmds.add(new Where(core));
+        cmds.add(lf);
         return cmds;
     }
 
@@ -40,7 +43,7 @@ public class ManagementModule implements Module
     {
         ArrayList<Listener> listeners = new ArrayList<Listener>();
         listeners.add(shadowKick.getListener());
-        listeners.add(new LostAndFound(core));
+        listeners.add(lf);
         listeners.add(freeze);
         return listeners;
     }

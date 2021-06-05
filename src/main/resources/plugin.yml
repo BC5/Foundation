@@ -101,3 +101,13 @@ commands:
   lives:
     description: Check hardcore lives
     usage: /lives, /lives <player>
+  found:
+    description: Access items that have burnt or despawned
+    usage: /found, /lost
+    aliases:
+      - "lost"
+  moon:
+    description: Check moon phase
+    usage: /moon
+    aliases:
+      - "moonphase"

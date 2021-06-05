@@ -97,6 +97,20 @@ cmds:
     playerlife: "§6You have §c1 §6life"
     otherlivesplural: "§d{x} §6has §e{y} §6lives"
     otherlife: "§d{x} §6has §c1 §6life"
+  lostfound:
+    guiTitle: "§dLost and Found"
+  moon:
+    moon: "§dThe moon is currently "
+    FULL: "§dThere's a §3full moon §dtoday"
+    WANING_GIBBOUS: "§dThe moon is a §3waning gibbous §dtoday"
+    THIRD_QUARTER: "§dThe moon is now in its §3third quarter"
+    WANING_CRESCENT: "§dThe moon is a §3waning crescent §dtoday"
+    NEW: "§dThere's a §dnew moon §dtoday"
+    WAXING_CRESCENT: "§dThe moon is a §3waxing crescent §dtoday"
+    FIRST_QUARTER: "§dThe moon is now in its §3first quarter"
+    WAXING_GIBBOUS: "§dThe moon is a §3waxing gibbous §dtoday"
+
+
 
 perm:
   noPermission: §4You aren't allowed to do that.

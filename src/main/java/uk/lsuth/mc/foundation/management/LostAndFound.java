@@ -1,15 +1,25 @@
 package uk.lsuth.mc.foundation.management;
 
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityCombustByBlockEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.DataManager;
 
@@ -17,23 +27,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class LostAndFound implements Listener
+public class LostAndFound extends FoundationCommand implements Listener
 {
     DataManager dmgr;
     Logger log;
-
+    FoundationCore core;
     Document doc;
 
     private static final String docname = "lostnfound";
+    private String lftitle;
+    private static final int maxsize = 54;
 
+    Inventory inv;
     ArrayList<ItemStack> itemStacks;
 
     public LostAndFound(FoundationCore core)
     {
+        super("found");
+        this.core = core;
         dmgr = core.getDmgr();
         log = core.log;
 
         itemStacks = new ArrayList<ItemStack>();
+
+        lftitle = core.getLmgr().getCommandStrings("lostfound").get("guiTitle");
 
         if(dmgr.miscDocExists(docname))
         {
@@ -46,7 +63,6 @@ public class LostAndFound implements Listener
             doc.put("items",new ArrayList<String>());
             dmgr.registerMiscDoc(docname,doc);
         }
-
         importFromDoc();
     }
 
@@ -103,8 +119,103 @@ public class LostAndFound implements Listener
             exportToDoc();
         }
 
+        if(itemStacks.size() > maxsize)
+        {
+            prune();
+        }
+
     }
 
+    private void prune()
+    {
+        long t = System.currentTimeMillis();
+
+        for(ItemStack i: itemStacks)
+        {
+            if(i.getMaxStackSize() > 1 && i.getAmount() != 0)
+            {
+                for(ItemStack j: itemStacks)
+                {
+                    if(!(i == j))
+                    {
+                        if(i.isSimilar(j))
+                        {
+                            if(i.getAmount() + j.getAmount() <= i.getMaxStackSize())
+                            {
+                                i.add(j.getAmount());
+                                j.setAmount(0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < itemStacks.size(); i++)
+        {
+            if(itemStacks.get(i).getAmount() == 0)
+            {
+                itemStacks.remove(i);
+                i--;
+            }
+        }
+
+        while(itemStacks.size() > maxsize)
+        {
+            itemStacks.remove(0);
+        }
+
+        exportToDoc();
+
+        t = System.currentTimeMillis() - t;
+        log.info("Pruned lost+found list in "+t+"ms.");
+
+    }
+
+    @EventHandler
+    public void onItemDamage(EntityDamageEvent e)
+    {
+        if(e.getEntity() instanceof Item)
+        {
+            String cause = "";
+            switch (e.getCause())
+            {
+                case LAVA:
+                    cause = "lava";
+                    break;
+                case FIRE:
+                case FIRE_TICK:
+                    cause = "fire";
+                    break;
+                case ENTITY_EXPLOSION:
+                case BLOCK_EXPLOSION:
+                    cause = "an explosion";
+                    break;
+                case VOID:
+                    cause = "the void";
+                    break;
+                case CONTACT:
+                    cause = "a cactus";
+                    break;
+                default:
+                    return;
+            }
+
+            Item i = (Item) e.getEntity();
+            if(isBlacklisted(i.getItemStack().getType())) return;
+            log.info("Saved " + i.getItemStack().getI18NDisplayName() + " from " + cause);
+            itemStacks.add(i.getItemStack());
+            exportToDoc();
+            i.remove();
+            if(itemStacks.size() > maxsize)
+            {
+                prune();
+            }
+        }
+    }
+
+
+    /** Rendered useless by above code block.
     @EventHandler
     public void onItemBurn(EntityCombustByBlockEvent e)
     {
@@ -121,6 +232,7 @@ public class LostAndFound implements Listener
             }
         }
     }
+    **/
 
 
     public static boolean isBlacklisted(Material M)
@@ -129,30 +241,135 @@ public class LostAndFound implements Listener
         //Don't count crap blocks.
         switch (M)
         {
-            case ROTTEN_FLESH:
-            case BONE:
-            case ARROW:
-            case STONE_SWORD:
-            case COBBLESTONE:
-            case ANDESITE:
-            case GRANITE:
-            case DIORITE:
-            case NETHERRACK:
-            case DIRT:
-            case WHITE_WOOL:
-            case MUTTON:
-            case STICK:
-            case OAK_SAPLING:
-            case DARK_OAK_SAPLING:
-            case SPRUCE_SAPLING:
-            case BIRCH_SAPLING:
-            case JUNGLE_SAPLING:
             case ACACIA_SAPLING:
+            case ANDESITE:
             case APPLE:
+            case ARROW:
+            case BEEF:
+            case BIRCH_SAPLING:
+            case BONE:
+            case CHICKEN:
+            case COBBLESTONE:
+            case COD:
+            case DARK_OAK_SAPLING:
+            case DIORITE:
+            case DIRT:
+            case EGG:
+            case FEATHER:
+            case GHAST_TEAR:
+            case GRANITE:
+            case GRAVEL:
+            case GUNPOWDER:
+            case INK_SAC:
+            case JUNGLE_SAPLING:
+            case LEATHER:
+            case MAGMA_CREAM:
+            case MUTTON:
+            case NETHERRACK:
+            case OAK_SAPLING:
+            case PORKCHOP:
+            case PRISMARINE_CRYSTALS:
+            case PRISMARINE_SHARD:
+            case RABBIT:
+            case RABBIT_HIDE:
+            case RED_SAND:
+            case ROTTEN_FLESH:
+            case SALMON:
+            case SAND:
+            case SEAGRASS:
+            case SLIME_BALL:
+            case SNOWBALL:
+            case SPIDER_EYE:
+            case SPRUCE_SAPLING:
+            case STICK:
+            case STONE_SWORD:
+            case STRING:
+            case TROPICAL_FISH:
+            case WHEAT_SEEDS:
+            case WHITE_WOOL:
                 return true;
             default:
                 return false;
         }
     }
 
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
+    {
+        if(!(sender.hasPermission("foundation.lostandfound")))
+        {
+            sender.sendMessage(FoundationCore.noPermission);
+            return true;
+        }
+
+        if(args.length == 0 && sender instanceof Player)
+        {
+            Player p = (Player) sender;
+            prune();
+            if(inv == null) inv = Bukkit.createInventory(null,54,lftitle);
+            else
+            {
+                inv.clear();
+            }
+            for(ItemStack is: itemStacks) inv.addItem(is);
+
+            p.openInventory(inv);
+
+            return true;
+        }
+        return false;
+    }
+
+    @EventHandler
+    public void inventoryEvent(InventoryClickEvent e)
+    {
+        String title = e.getWhoClicked().getOpenInventory().getTitle();
+        //Prevent spamming console with exceptions every time somebody clicks out of bounds
+        if(e.getClickedInventory() == null)
+        {
+            return;
+        }
+
+        if(title.equals(lftitle) && e.getClickedInventory().getType() == InventoryType.CHEST)
+        {
+            //Only allow extraction.
+            if(e.getAction() == InventoryAction.PICKUP_ALL || e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY)
+            {
+                ItemStack i = e.getCurrentItem();
+
+                int x = -1;
+                for(int j = 0; j < itemStacks.size(); j++)
+                {
+                    if(i.equals(itemStacks.get(j)))
+                    {
+                        x = j;
+                        break;
+                    }
+                }
+
+                if(x == -1)
+                {
+                    log.severe("Failed to remove item from lost and found list. Possible item dupe? " + i.getAmount() + " " + i.getI18NDisplayName() + " by " + e.getWhoClicked().getName());
+                    e.setCancelled(true);
+                }
+                else
+                {
+                    itemStacks.remove(x);
+
+                    Bukkit.getScheduler().runTaskLater(core,() -> {
+                        inv.clear();
+                        for(ItemStack is: itemStacks) inv.addItem(is);
+                    },1);
+
+
+                    exportToDoc();
+                }
+            }
+            else
+            {
+                e.setCancelled(true);
+            }
+
+        }
+    }
 }
