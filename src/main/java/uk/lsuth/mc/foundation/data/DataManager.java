@@ -76,7 +76,7 @@ public abstract class DataManager
 
     public void stash()
     {
-        log.info("Stashing data");
+        log.fine("Stashing data");
         for(PlayerDataWrapper p:cachedPlayers)
         {
             savePlayer(p.getPlayer());
