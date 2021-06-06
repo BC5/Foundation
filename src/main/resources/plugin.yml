@@ -111,3 +111,6 @@ commands:
     usage: /moon
     aliases:
       - "moonphase"
+  echest:
+    description: Access ender chest
+    usage: /echest
