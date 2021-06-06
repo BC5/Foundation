@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -110,9 +111,9 @@ public class LostAndFound extends FoundationCommand implements Listener
     @EventHandler
     public void onItemDespawn(ItemDespawnEvent e)
     {
-        Material m = e.getEntity().getItemStack().getType();
+        ItemStack i = e.getEntity().getItemStack();
 
-        if(!isBlacklisted(m))
+        if(!isBlacklisted(i))
         {
             log.info("Saved " + e.getEntity().getItemStack().getI18NDisplayName() + " from despawn");
             itemStacks.add(e.getEntity().getItemStack());
@@ -175,9 +176,9 @@ public class LostAndFound extends FoundationCommand implements Listener
     @EventHandler
     public void onItemDamage(EntityDamageEvent e)
     {
-        if(e.getEntity() instanceof Item)
+        if(e.getEntity() instanceof Item i)
         {
-            String cause = "";
+            String cause;
             switch (e.getCause())
             {
                 case LAVA:
@@ -201,8 +202,7 @@ public class LostAndFound extends FoundationCommand implements Listener
                     return;
             }
 
-            Item i = (Item) e.getEntity();
-            if(isBlacklisted(i.getItemStack().getType())) return;
+            if(isBlacklisted(i.getItemStack())) return;
             log.info("Saved " + i.getItemStack().getI18NDisplayName() + " from " + cause);
             itemStacks.add(i.getItemStack());
             exportToDoc();
@@ -235,11 +235,11 @@ public class LostAndFound extends FoundationCommand implements Listener
     **/
 
 
-    public static boolean isBlacklisted(Material M)
+    public static boolean isBlacklisted(ItemStack i)
     {
         //Don't count drops from mobs that burn in the sun.
         //Don't count crap blocks.
-        switch (M)
+        switch (i.getType())
         {
             case ACACIA_SAPLING:
             case ANDESITE:
@@ -287,9 +287,107 @@ public class LostAndFound extends FoundationCommand implements Listener
             case TROPICAL_FISH:
             case WHEAT_SEEDS:
             case WHITE_WOOL:
-                return true;
+            case KELP:
+            case BAMBOO:
+            case RAIL:
+            case LILY_PAD:
+                return extendedBlacklist(i);
             default:
                 return false;
+        }
+    }
+
+    @SuppressWarnings("DuplicateBranchesInSwitch")
+    private static boolean extendedBlacklist(ItemStack i)
+    {
+        if(i.getItemMeta() instanceof Damageable metad)
+        {
+            //Do not discard anything enchanted
+            if(i.getEnchantments().size() != 0)
+            {
+                return false;
+            }
+            Material m = i.getType();
+
+
+            switch(m)
+            {
+                //FALSE to save
+                //TRUE to scrap
+                //BREAK to check durability
+
+                case ELYTRA:
+                    return false;
+                case SHEARS:
+                case FLINT_AND_STEEL:
+                case FISHING_ROD:
+                    break;
+                case DIAMOND_HELMET:
+                case DIAMOND_CHESTPLATE:
+                case DIAMOND_LEGGINGS:
+                case DIAMOND_BOOTS:
+                case DIAMOND_PICKAXE:
+                case DIAMOND_AXE:
+                case DIAMOND_SHOVEL:
+                case DIAMOND_SWORD:
+                case DIAMOND_HOE:
+                    return false;
+                case GOLDEN_HELMET:
+                case GOLDEN_CHESTPLATE:
+                case GOLDEN_LEGGINGS:
+                case GOLDEN_BOOTS:
+                case GOLDEN_PICKAXE:
+                case GOLDEN_AXE:
+                case GOLDEN_SHOVEL:
+                case GOLDEN_SWORD:
+                case GOLDEN_HOE:
+                    return true;
+                case LEATHER:
+                case LEATHER_CHESTPLATE:
+                case LEATHER_LEGGINGS:
+                case LEATHER_BOOTS:
+                    break;
+                case STONE_PICKAXE:
+                case STONE_AXE:
+                case STONE_SHOVEL:
+                case STONE_SWORD:
+                case STONE_HOE:
+                    return true;
+                case IRON_HELMET:
+                case IRON_CHESTPLATE:
+                case IRON_LEGGINGS:
+                case IRON_BOOTS:
+                case IRON_PICKAXE:
+                case IRON_AXE:
+                case IRON_SHOVEL:
+                case IRON_SWORD:
+                case IRON_HOE:
+                    break;
+                case WOODEN_PICKAXE:
+                case WOODEN_AXE:
+                case WOODEN_SHOVEL:
+                case WOODEN_SWORD:
+                case WOODEN_HOE:
+                    return true;
+                default:
+                    break;
+
+            }
+
+            //Do not discard anything with 50% or above durability
+            float maxd = m.getMaxDurability();
+            if((maxd - metad.getDamage()) / maxd >= 0.5f)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -302,9 +400,8 @@ public class LostAndFound extends FoundationCommand implements Listener
             return true;
         }
 
-        if(args.length == 0 && sender instanceof Player)
+        if(args.length == 0 && sender instanceof Player p)
         {
-            Player p = (Player) sender;
             prune();
             if(inv == null) inv = Bukkit.createInventory(null,54,lftitle);
             else
