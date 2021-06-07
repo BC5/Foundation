@@ -19,13 +19,20 @@ public class LanguageManager
     FileConfiguration cfg;
     FoundationCore core;
     HashMap<String,String> lang;
+    ItemSearch itemSearch;
 
 
     public LanguageManager(FileConfiguration cfg, FoundationCore core)
     {
         this.cfg = cfg;
         this.core = core;
+        this.itemSearch = new ItemSearch(cfg.getBoolean("tabcomplete.lowcpu"));
         loadMCLang(core.getDataFolder() + "/en_gb.json");
+    }
+
+    public ItemSearch getItemSearch()
+    {
+        return itemSearch;
     }
 
     public String getLocalisedName(ItemStack is,boolean useItemMeta)

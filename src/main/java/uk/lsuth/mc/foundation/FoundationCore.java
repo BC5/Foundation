@@ -20,6 +20,7 @@ import uk.lsuth.mc.foundation.economy.EconomyModule;
 import uk.lsuth.mc.foundation.essentialcommands.EssentialsModule;
 import uk.lsuth.mc.foundation.fabric.FabricModule;
 import uk.lsuth.mc.foundation.gamerules.GameruleModule;
+import uk.lsuth.mc.foundation.language.ItemSearch;
 import uk.lsuth.mc.foundation.language.LanguageManager;
 import uk.lsuth.mc.foundation.management.ManagementModule;
 import uk.lsuth.mc.foundation.pvp.PVPModule;
@@ -154,6 +155,10 @@ public class FoundationCore extends JavaPlugin
         dmgr.stash();
     }
 
+    public ItemSearch getItemSearch()
+    {
+        return lmgr.getItemSearch();
+    }
 
     private void registerCommands()
     {

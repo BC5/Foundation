@@ -51,6 +51,10 @@
       <id>dmulloy2-repo</id>
       <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
     </repository>
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -90,9 +94,25 @@
     <dependency>
       <groupId>com.destroystokyo.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.15.2-R0.1-SNAPSHOT</version>
+      <version>1.16.5-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>adventure-api</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>adventure-text-serializer-gson</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>adventure-text-serializer-legacy</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>adventure-text-serializer-plain</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>commons-lang</artifactId>
           <groupId>commons-lang</groupId>

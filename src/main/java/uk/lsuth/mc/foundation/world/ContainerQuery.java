@@ -5,16 +5,20 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import uk.lsuth.mc.foundation.FoundationCommand;
 import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.language.LanguageManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ContainerQuery extends FoundationCommand
@@ -31,6 +35,7 @@ public class ContainerQuery extends FoundationCommand
         this.lmgr = core.getLmgr();
         strings = lmgr.getCommandStrings("query");
         this.core = core;
+        this.completer = new QueryTabComplete(core);
     }
 
     @Override
@@ -349,4 +354,34 @@ public class ContainerQuery extends FoundationCommand
             }
         }
     }
+
+    static class QueryTabComplete implements TabCompleter
+    {
+        FoundationCore core;
+
+        public QueryTabComplete(FoundationCore core)
+        {
+            this.core = core;
+        }
+
+        @Override
+        public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args)
+        {
+            if(args.length == 1)
+            {
+                long t1 = System.currentTimeMillis();
+                List<String> a = core.getItemSearch().deepSearch(args[0]);
+                long t2 = System.currentTimeMillis();
+                List<String> b = core.getItemSearch().alphabeticalSearch(args[0]);
+                long t3 = System.currentTimeMillis();
+
+                core.log.severe(t1-t2 + "ms for deep search");
+                core.log.severe(t2-t3 + "ms for light search");
+
+                return a;
+            }
+            return null;
+        }
+    }
+
 }

@@ -1,4 +1,6 @@
 lang: "en-gb"
+tabcomplete:
+  lowcpu: false
 data:
   flatfile: true
   mongourl: "mongodb://localhost:27017/"

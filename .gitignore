@@ -1,2 +1,6 @@
 # Project exclude paths
 /target/
+/out/production/Foundation/config.yml
+/out/production/Foundation/en-gb.yml
+/out/production/Foundation/META-INF/MANIFEST.MF
+/out/production/Foundation/plugin.yml
