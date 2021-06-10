@@ -36,6 +36,7 @@ public class WorldModule implements Module
         listeners.add(new BiomeChange(core));
         listeners.add(new StopEndermanGriefing());
         listeners.add(slabber);
+        listeners.add(new FurnacePersistence(core));
         return listeners;
     }
 
