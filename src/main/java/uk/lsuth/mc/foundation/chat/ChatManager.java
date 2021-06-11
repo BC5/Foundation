@@ -1,14 +1,14 @@
 package uk.lsuth.mc.foundation.chat;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -41,13 +41,26 @@ public class ChatManager implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void chatEvent(AsyncPlayerChatEvent event)
+    public void chatEvent(AsyncChatEvent event)
     {
-        Matcher m = coordinatePattern.matcher(event.getMessage());
+
+        String msgtxt;
+        if(event.message() instanceof TextComponent txt)
+        {
+            msgtxt = txt.content();
+        }
+        else
+        {
+            System.err.println("oh no:" + event.message().toString());
+            return;
+        }
+
+
+        Matcher m = coordinatePattern.matcher(msgtxt);
 
         if(m.matches())
         {
-            String msg = event.getMessage();
+            String msg = msgtxt;
             msg = msg.replaceFirst(pattern,builder.formatCoordinate(m));
             msg = builder.build(event.getPlayer(),msg);
 
@@ -55,19 +68,20 @@ public class ChatManager implements Listener
             String command = getCommand(m,coordinates,event.getPlayer().getDisplayName());
 
 
-
+            /**
             TextComponent txt = new TextComponent(TextComponent.fromLegacyText(msg));
             event.setCancelled(true);
             ClickEvent ce = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command);
             txt.setClickEvent(ce);
+            */
 
-            Bukkit.getServer().broadcast(txt);
+            Bukkit.getServer().sendMessage(Component.text(msg));
         }
         else
         {
-            String msg = builder.build(event.getPlayer(), event.getMessage());
+            String msg = builder.build(event.getPlayer(), msgtxt);
             event.setCancelled(true);
-            Bukkit.getServer().broadcastMessage(msg);
+            Bukkit.getServer().sendMessage(Component.text(msg));
         }
 
 
@@ -102,19 +116,19 @@ public class ChatManager implements Listener
         String nickname = pdoc.getString("nickname");
         if(nickname != null)
         {
-            player.setDisplayName(nickname);
-            player.setPlayerListName(nickname);
+            player.displayName(Component.text(nickname));
+            player.playerListName(Component.text(nickname));
             player.setCustomName(nickname);
 
         }
 
-        e.setJoinMessage(builder.buildJoinMessage(player));
+        e.joinMessage(Component.text(builder.buildJoinMessage(player)));
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onLeave(PlayerQuitEvent e)
     {
-        e.setQuitMessage(builder.buildQuitMessage(e.getPlayer()));
+        e.quitMessage(Component.text(builder.buildQuitMessage(e.getPlayer())));
     }
 
 }
