@@ -16,7 +16,6 @@ import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.milkbowl.vault.chat.Chat;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,28 +27,24 @@ import uk.lsuth.mc.foundation.FoundationCore;
 import uk.lsuth.mc.foundation.data.DataManager;
 import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PaperChatManager implements Listener
 {
 
-
-
-
     Chat vaultChat;
     FoundationCore core;
     ChatRenderer renderer;
     DataManager dmgr;
-    FileConfiguration cfg;
+    Map<String,String> msgs;
 
     public PaperChatManager(FoundationCore core)
     {
         this.core = core;
         this.dmgr = core.getDmgr();
-        this.cfg = core.getConfiguration();
-
-
+        this.msgs = core.getLmgr().getStrings("chat");
 
         vaultChat = Bukkit.getServer().getServicesManager().getRegistration(Chat.class).getProvider();
         renderer = new ChatRenderer();
@@ -102,9 +97,9 @@ public class PaperChatManager implements Listener
             boldPattern = Pattern.compile(boldRegex);
             italicsPattern = Pattern.compile(italicsRegex);
 
-            chatSeparator = Component.text(cfg.getString("chat.separator"),NamedTextColor.YELLOW);
-            leave = Component.text(cfg.getString("chat.leave"),NamedTextColor.GOLD);
-            join = Component.text(cfg.getString("chat.join"),NamedTextColor.GOLD);
+            chatSeparator = Component.text(msgs.get("separator"),NamedTextColor.YELLOW);
+            leave = Component.text(msgs.get("leave"),NamedTextColor.GOLD);
+            join = Component.text(msgs.get("join"),NamedTextColor.GOLD);
         }
 
         public void setNames(Player p)
@@ -114,7 +109,6 @@ public class PaperChatManager implements Listener
             String nickname = pdoc.getString("nickname");
 
             String name = p.getName();
-
             if(nickname != null)
             {
                 name = nickname;
@@ -122,7 +116,6 @@ public class PaperChatManager implements Listener
 
             Component namec = Component.text(name);
             namec = namec.style(getPlayerStyle(p));
-
             p.displayName(namec);
             p.playerListName(namec);
             p.customName(namec);
