@@ -1,14 +1,14 @@
-package uk.lsuth.mc.foundation.chat;
+package uk.lsuth.mc.foundation.chat.legacy;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import uk.lsuth.mc.foundation.FoundationCore;
@@ -18,6 +18,7 @@ import uk.lsuth.mc.foundation.data.PlayerDataWrapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("Deprecated")
 public class ChatManager implements Listener
 {
     public final static String pattern = "(?<n>nether )?[xX]:(?<x>-?\\d+) [yY]:(?<y>-?\\d+) [zZ]:(?<z>-?\\d+)";
@@ -41,26 +42,13 @@ public class ChatManager implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void chatEvent(AsyncChatEvent event)
+    public void chatEvent(AsyncPlayerChatEvent event)
     {
-
-        String msgtxt;
-        if(event.message() instanceof TextComponent txt)
-        {
-            msgtxt = txt.content();
-        }
-        else
-        {
-            System.err.println("oh no:" + event.message().toString());
-            return;
-        }
-
-
-        Matcher m = coordinatePattern.matcher(msgtxt);
+        Matcher m = coordinatePattern.matcher(event.getMessage());
 
         if(m.matches())
         {
-            String msg = msgtxt;
+            String msg = event.getMessage();
             msg = msg.replaceFirst(pattern,builder.formatCoordinate(m));
             msg = builder.build(event.getPlayer(),msg);
 
@@ -68,20 +56,19 @@ public class ChatManager implements Listener
             String command = getCommand(m,coordinates,event.getPlayer().getDisplayName());
 
 
-            /**
+
             TextComponent txt = new TextComponent(TextComponent.fromLegacyText(msg));
             event.setCancelled(true);
             ClickEvent ce = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,command);
             txt.setClickEvent(ce);
-            */
 
-            Bukkit.getServer().sendMessage(Component.text(msg));
+            Bukkit.getServer().broadcast(txt);
         }
         else
         {
-            String msg = builder.build(event.getPlayer(), msgtxt);
+            String msg = builder.build(event.getPlayer(), event.getMessage());
             event.setCancelled(true);
-            Bukkit.getServer().sendMessage(Component.text(msg));
+            Bukkit.getServer().broadcastMessage(msg);
         }
 
 
@@ -116,19 +103,19 @@ public class ChatManager implements Listener
         String nickname = pdoc.getString("nickname");
         if(nickname != null)
         {
-            player.displayName(Component.text(nickname));
-            player.playerListName(Component.text(nickname));
+            player.setDisplayName(nickname);
+            player.setPlayerListName(nickname);
             player.setCustomName(nickname);
 
         }
 
-        e.joinMessage(Component.text(builder.buildJoinMessage(player)));
+        e.setJoinMessage(builder.buildJoinMessage(player));
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onLeave(PlayerQuitEvent e)
     {
-        e.quitMessage(Component.text(builder.buildQuitMessage(e.getPlayer())));
+        e.setQuitMessage(builder.buildQuitMessage(e.getPlayer()));
     }
 
 }

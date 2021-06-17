@@ -1,4 +1,4 @@
-package uk.lsuth.mc.foundation.chat;
+package uk.lsuth.mc.foundation.chat.legacy;
 
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;

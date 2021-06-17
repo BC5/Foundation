@@ -46,10 +46,38 @@ public class FoundationCore extends JavaPlugin
 
     private ArrayList<Module> modules;
 
+    public boolean paperAPI;
+    public boolean spigotAPI;
+
+
     @Override
     public void onEnable()
     {
         log = this.getLogger();
+
+        try
+        {
+            Class.forName("org.spigotmc.SpigotConfig");
+            spigotAPI = true;
+        }
+        catch (ClassNotFoundException e)
+        {
+            spigotAPI = false;
+        }
+
+        try
+        {
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            paperAPI = true;
+        }
+        catch (ClassNotFoundException e)
+        {
+            paperAPI = false;
+        }
+
+        if(!spigotAPI) log.severe("Did not detect Spigot APIs present. Expect errors");
+        if(!paperAPI) log.warning("Did not detect Paper APIs present. Expect some features to be disabled");
+
 
         log.info("Loading configuration");
         cfg = this.getConfig();
