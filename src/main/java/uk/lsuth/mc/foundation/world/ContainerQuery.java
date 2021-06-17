@@ -369,15 +369,7 @@ public class ContainerQuery extends FoundationCommand
         {
             if(args.length == 1)
             {
-                long t1 = System.currentTimeMillis();
-                List<String> a = core.getItemSearch().deepSearch(args[0]);
-                long t2 = System.currentTimeMillis();
-                List<String> b = core.getItemSearch().alphabeticalSearch(args[0]);
-                long t3 = System.currentTimeMillis();
-
-                core.log.severe(t1-t2 + "ms for deep search");
-                core.log.severe(t2-t3 + "ms for light search");
-
+                List<String> a = core.getItemSearch().search(args[0]);
                 return a;
             }
             return null;

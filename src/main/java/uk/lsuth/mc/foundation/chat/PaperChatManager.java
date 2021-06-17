@@ -12,7 +12,6 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.milkbowl.vault.chat.Chat;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -146,8 +145,6 @@ public class PaperChatManager implements Listener
 
             //MESSAGE
             finalMessage = finalMessage.append(buildMessage(message));
-
-            core.log.info(PlainComponentSerializer.plain().serialize(finalMessage));
 
             return finalMessage;
         }

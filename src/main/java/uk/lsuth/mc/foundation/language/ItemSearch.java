@@ -56,6 +56,7 @@ public class ItemSearch
     {
         if(in == null) return null;
         if(in.length() == 0) return null;
+        if(!in.matches("[a-zA-Z_]+")) return null;
 
         in = in.toLowerCase();
         int l = in.charAt(0) - 'a';
@@ -89,6 +90,7 @@ public class ItemSearch
     {
         if(in == null) return null;
         if(in.length() == 0) return null;
+        if(!in.matches("[a-zA-Z_]+")) return null;
 
         ArrayList<String> simpleResults = alphabeticalSearch(in);
         ArrayList<String> results = (ArrayList<String>) itemids.clone();
