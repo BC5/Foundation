@@ -124,6 +124,11 @@ econ:
   lootKiller: §6Looted §a{x} §6from §a{y}
 
 chat:
+  separator: " >> "
+  join: " joined"
+  leave: " left"
+
+legacychat:
   format: "{prefix}{player} §e>>§r {message}"
   join: "{prefix}{player} §6joined"
   leave: "{prefix}{player} §6left"

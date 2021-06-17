@@ -30,7 +30,7 @@ public class ChatManager implements Listener
 
     public ChatManager(FoundationCore core)
     {
-        builder = new MessageBuilder(core.getLmgr().getStrings("chat"));
+        builder = new MessageBuilder(core.getLmgr().getStrings("legacychat"));
         dmgr = core.getDmgr();
         coordinatePattern = Pattern.compile(pattern);
     }
