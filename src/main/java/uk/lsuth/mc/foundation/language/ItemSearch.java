@@ -56,15 +56,16 @@ public class ItemSearch
     {
         if(in == null) return null;
         if(in.length() == 0) return null;
-        if(!in.matches("[a-zA-Z_]+")) return null;
 
         in = in.toLowerCase();
         int l = in.charAt(0) - 'a';
 
+        if(l < 0 || l >= 26) return null;
+
         ArrayList<String> results = new ArrayList<>();
         int currentsim = 0;
 
-        for(int i = index[l]; i < index[l+1]; i++)
+        for(int i = index[l]; i < index[l]+1; i++)
         {
             String str = itemids.get(i);
             int sim = similarity(in,str);
@@ -90,7 +91,6 @@ public class ItemSearch
     {
         if(in == null) return null;
         if(in.length() == 0) return null;
-        if(!in.matches("[a-zA-Z_]+")) return null;
 
         ArrayList<String> simpleResults = alphabeticalSearch(in);
         ArrayList<String> results = (ArrayList<String>) itemids.clone();
