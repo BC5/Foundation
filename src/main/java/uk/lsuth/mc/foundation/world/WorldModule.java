@@ -13,11 +13,13 @@ public class WorldModule implements Module
 {
     FoundationCore core;
     Slabber slabber;
+    Bind bind;
 
     public WorldModule(FoundationCore core)
     {
         this.core = core;
         slabber = new Slabber(core);
+        bind = new Bind(core);
     }
 
     @Override
@@ -25,6 +27,7 @@ public class WorldModule implements Module
     {
         ArrayList<FoundationCommand> cmds = new ArrayList<FoundationCommand>();
         cmds.add(slabber);
+        cmds.add(bind);
         cmds.add(new ContainerQuery(core));
         return cmds;
     }
@@ -36,6 +39,7 @@ public class WorldModule implements Module
         listeners.add(new BiomeChange(core));
         listeners.add(new StopEndermanGriefing());
         listeners.add(slabber);
+        listeners.add(bind);
         listeners.add(new FurnacePersistence(core));
         return listeners;
     }

@@ -109,6 +109,11 @@ cmds:
     WAXING_CRESCENT: "§dThe moon is a §3waxing crescent §dtoday"
     FIRST_QUARTER: "§dThe moon is now in its §3first quarter"
     WAXING_GIBBOUS: "§dThe moon is a §3waxing gibbous §dtoday"
+  bind:
+    bindlore: "Bound to "
+    bowname: "Bound Bow"
+    bound: "Item bound to "
+    noplayer: "§6Couldn't find that player"
 
 
 

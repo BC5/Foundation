@@ -114,3 +114,6 @@ commands:
   echest:
     description: Access ender chest
     usage: /echest
+  bind:
+    description: Bind an enderpearl to yourself or another player
+    usage: /bind, /bind <target>
