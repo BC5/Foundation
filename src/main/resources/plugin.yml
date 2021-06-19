@@ -117,3 +117,6 @@ commands:
   bind:
     description: Bind an enderpearl to yourself or another player
     usage: /bind, /bind <target>
+  fly:
+    description: Toggle flight in survival
+    usage: /fly

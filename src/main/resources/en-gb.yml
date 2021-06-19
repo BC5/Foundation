@@ -114,6 +114,9 @@ cmds:
     bowname: "Bound Bow"
     bound: "Item bound to "
     noplayer: "§6Couldn't find that player"
+  fly:
+    flyon: "§6Flight §aenabled"
+    flyoff: "§6Flight §cdisabled"
 
 
 
