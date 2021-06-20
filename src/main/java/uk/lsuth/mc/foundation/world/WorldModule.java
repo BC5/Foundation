@@ -41,6 +41,7 @@ public class WorldModule implements Module
         listeners.add(slabber);
         listeners.add(bind);
         listeners.add(new FurnacePersistence(core));
+        listeners.add(new NoIronFarm());
         return listeners;
     }
 
