@@ -249,6 +249,7 @@ public class LostAndFound extends FoundationCommand implements Listener
             case BIRCH_SAPLING:
             case BONE:
             case CHICKEN:
+            case COBBLED_DEEPSLATE:
             case COBBLESTONE:
             case COD:
             case DARK_OAK_SAPLING:
@@ -257,6 +258,7 @@ public class LostAndFound extends FoundationCommand implements Listener
             case EGG:
             case FEATHER:
             case GHAST_TEAR:
+            case GLOW_INK_SAC:
             case GRANITE:
             case GRAVEL:
             case GUNPOWDER:
