@@ -190,19 +190,20 @@ public class FoundationCore extends JavaPlugin
 
     private void registerCommands()
     {
+        int cmds = 0;
         for(Module md:modules)
         {
             for(FoundationCommand cmd:md.getCommands())
             {
                 try
                 {
-                    log.info("Registering command /" + cmd.getCommand());
+                    log.fine("Registering command /" + cmd.getCommand());
                     this.getCommand(cmd.getCommand()).setExecutor(cmd);
                     if (cmd.completer != null)
                     {
-                        System.out.println("not null!");
                         this.getCommand(cmd.getCommand()).setTabCompleter(cmd.completer);
                     }
+                    cmds++;
                 }
                 catch (Exception e)
                 {
@@ -211,6 +212,7 @@ public class FoundationCore extends JavaPlugin
                 }
             }
         }
+        log.info("Registered " + cmds + " commands");
     }
 
     private void registerModules(PluginManager pluginManager)

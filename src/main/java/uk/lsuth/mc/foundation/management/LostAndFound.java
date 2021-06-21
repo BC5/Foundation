@@ -169,7 +169,7 @@ public class LostAndFound extends FoundationCommand implements Listener
         exportToDoc();
 
         t = System.currentTimeMillis() - t;
-        log.info("Pruned lost+found list in "+t+"ms.");
+        log.finer("Pruned lost+found list in "+t+"ms.");
 
     }
 
@@ -203,7 +203,7 @@ public class LostAndFound extends FoundationCommand implements Listener
             }
 
             if(isBlacklisted(i.getItemStack())) return;
-            log.info("Saved " + i.getItemStack().getI18NDisplayName() + " from " + cause);
+            log.finer("Saved " + i.getItemStack().getI18NDisplayName() + " from " + cause);
             itemStacks.add(i.getItemStack());
             exportToDoc();
             i.remove();
